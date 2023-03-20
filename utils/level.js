@@ -28,7 +28,7 @@ function createLevelEmbed(levelData, interaction) {
 			},
 			{
 				name: 'Diff Strength',
-				value: (!levelData.diffstrength ? interaction.guild.emojis.cache.get(emojiData['misc']['question']).toString() : interaction.client.emojis.cache.get(emojiData['diffStrength'][levelData.diffstrength]).toString()),
+				value: (!levelData.diffstrength ? interaction.client.emojis.cache.get(emojiData['misc']['question']).toString() : interaction.client.emojis.cache.get(emojiData['diffStrength'][levelData.diffstrength]).toString()),
 				inline: true,
 			},
 		],
