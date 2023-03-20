@@ -18,6 +18,6 @@ module.exports = {
 		const levelEmbed = levelUtils.createLevelEmbed(levelData, interaction);
 		const levelButtonsRow = levelUtils.createLevelButtons(levelData);
 
-		await interaction.editReply({ embeds: [levelEmbed], components: [levelButtonsRow] });
+		await interaction.editReply({ content: '', embeds: [levelEmbed], components: [levelButtonsRow] });
 	},
 };
