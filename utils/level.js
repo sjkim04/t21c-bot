@@ -1,8 +1,10 @@
 const fs = require('node:fs');
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, EmbedBuilder } = require('discord.js');
 
-const emoji = fs.readFileSync('emoji.json');
-const emojiData = JSON.parse(emoji);
+const infoJSON = fs.readFileSync('info.json');
+const info = JSON.parse(infoJSON);
+const emojiData = info['emojis'];
+const colorData = info['diffColors'];
 
 function createLevelEmbed(levelData, interaction) {
 	let videoId;
@@ -16,30 +18,21 @@ function createLevelEmbed(levelData, interaction) {
 		levelData.vidLink = null;
 	}
 
-	const levelEmbed = {
-		color: 0x0099ff,
-		title: `${levelData.artist} - ${levelData.song}`,
-		description: `Level by ${levelData.creator}`,
-		fields: [
-			{
-				name: 'Difficulty',
-				value: interaction.client.emojis.cache.get(emojiData['diff'][levelData.diff]).toString(),
-				inline: true,
-			},
+	const levelEmbed = new EmbedBuilder()
+		.setColor(colorData[levelData.diff])
+		.setTitle(`${levelData.artist} - ${levelData.song}`)
+		.setDescription(`Level by ${levelData.creator}`)
+		.addFields(
+			{ name: 'Difficulty', 'value': interaction.client.emojis.cache.get(emojiData['diff'][levelData.diff]).toString(), inline: true },
 			{
 				name: 'Diff Strength',
 				value: (!levelData.diffstrength ? interaction.client.emojis.cache.get(emojiData['misc']['question']).toString() : interaction.client.emojis.cache.get(emojiData['diffStrength'][levelData.diffstrength]).toString()),
 				inline: true,
 			},
-		],
-		image: {
-			url: (!videoId ? 'https://media.discordapp.net/attachments/1081897177594470471/1087255551211208764/c.png' : `https://i.ytimg.com/vi/${videoId}/original.jpg`),
-		},
-		timestamp: new Date().toISOString(),
-		footer: {
-			text: `ID: ${levelData.id}`,
-		},
-	};
+		)
+		.setImage((!videoId ? 'https://media.discordapp.net/attachments/1081897177594470471/1087255551211208764/c.png' : `https://i.ytimg.com/vi/${videoId}/original.jpg`))
+		.setTimestamp()
+		.setFooter({ text: `ID: ${levelData.id}` });
 
 	return levelEmbed;
 }

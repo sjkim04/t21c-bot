@@ -1,0 +1,19 @@
+{
+  "emojis": {
+    "diff": {
+      "comment": "All the emoji IDs of the difficulty that the API returns."
+    },
+    "diffStrength": {
+      "comment": "The emojis for the Difficulty Strength section of the API."
+    },
+    "levelData": {
+      "comment": "The download, youtube, and workshop emojis. These are used for the buttons in the level info embed."
+    },
+    "misc": {
+      "comment": "Currently, this only includes the question emoji, used for when the diffStrength is unknown."
+    }
+  },
+  "diffColors": {
+    "comment": "All the difficulty colors for the level."
+  }
+}
