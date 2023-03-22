@@ -7,7 +7,7 @@ const { Jejudo } = require('jejudo');
 
 // Create a new client instance
 const client = new Client({
-	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.DirectMessages, GatewayIntentBits.GuildMembers ],
+	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.DirectMessages ],
 	presence: {
 		activities: [{ name: 'T21+C', type: ActivityType.Playing }],
 	},
