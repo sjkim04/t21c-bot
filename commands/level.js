@@ -20,11 +20,20 @@ module.exports = {
 		const api = axios.create({
 			baseURL: apiHost,
 		});
-		const response = await api.get(`levels/${id}`);
-		if (response.status === 404) {
-			await interaction.editReply('The level could not be found');
-			return;
+		let response;
+		try {
+			response = await api.get(`levels/${id}`);
 		}
+		catch (err) {
+			if (err.response.status === 404) {
+				await interaction.editReply('The level could not be found.');
+				return;
+			}
+			else {
+				console.error(err);
+			}
+		}
+
 		const levelData = response.data;
 
 		const levelEmbed = levelUtils.createLevelEmbed(levelData, interaction);
