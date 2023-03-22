@@ -2,6 +2,8 @@ const { SlashCommandBuilder, ComponentType } = require('discord.js');
 const axios = require('axios');
 const { apiHost } = require('../config.json');
 const levelUtils = require('../utils/level');
+const messageUtils = require('../utils/message');
+const { getRandomInt } = require('../utils/general');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -14,6 +16,10 @@ module.exports = {
 				.addStringOption(option =>
 					option.setName('query')
 						.setDescription('General query to search'),
+				)
+				.addBooleanOption(option =>
+					option.setName('random')
+						.setDescription('Whether to randomize the results'),
 				),
 		),
 	async execute(interaction) {
@@ -21,14 +27,19 @@ module.exports = {
 			await interaction.deferReply();
 
 			const query = interaction.options.getString('query');
+			const random = interaction.options.getBoolean('random');
+			const seed = (random ? getRandomInt(Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER) : null);
+
 			const api = axios.create({
 				baseURL: apiHost,
 			});
 
 			const queryOptions = {
-				query: query,
+				query,
 				offset: 0,
 				limit: 25,
+				random,
+				seed,
 			};
 
 			const response = await api.get('levels/', {
@@ -38,6 +49,11 @@ module.exports = {
 
 			if (response.data.count === 0) {
 				interaction.editReply('No levels were found.');
+				return;
+			}
+
+			if (response.data.count === 1) {
+				interaction.editReply({ embeds: [levelUtils.createLevelEmbed(results[0])], components: levelUtils.createLevelButtons(results[0]) });
 				return;
 			}
 
@@ -65,6 +81,13 @@ module.exports = {
 
 				await i.deferUpdate();
 				return collector.resetTimer();
+			});
+
+			collector.on('end', async () => {
+				const message = await msg.fetch();
+				if (message.components.length !== 2) return;
+				interaction.editReply({ components: messageUtils.disableComponents(message.components, ['showLevel']) });
+
 			});
 
 		}

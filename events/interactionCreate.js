@@ -5,7 +5,8 @@ module.exports = {
 	async execute(interaction) {
 		interaction.client.jejudo.handleInteraction(interaction);
 		if (interaction.isStringSelectMenu()) {
-			if (interaction.customId === 'showLevel') {
+			const values = interaction.values[0];
+			if (interaction.customId === 'showLevel' && values.split('_')[1] === interaction.user.id) {
 				const handler = require('../handlers/showlevel');
 				handler.execute(interaction);
 			}
