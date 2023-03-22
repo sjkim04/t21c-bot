@@ -60,7 +60,7 @@ module.exports = {
 			let offset = 0;
 			const count = response.data.count;
 
-			const msg = await interaction.editReply(levelUtils.createSearchSelectList(results, 1, Math.ceil(count % 25), interaction.user.id));
+			const msg = await interaction.editReply(levelUtils.createSearchSelectList(results, 1, Math.ceil(count / 25), interaction.user.id));
 
 			const collector = msg.createMessageComponentCollector({ componentType: ComponentType.Button, filter: i => i.user.id === interaction.user.id, time: 60000 });
 
@@ -77,7 +77,7 @@ module.exports = {
 				queryOptions.offset = offset;
 				const newResponse = await api.get('levels/', { params: queryOptions });
 				const newResults = newResponse.data.results;
-				await interaction.editReply(levelUtils.createSearchSelectList(newResults, Math.ceil(offset / 25) + 1, Math.ceil(count % 25), interaction.user.id));
+				await interaction.editReply(levelUtils.createSearchSelectList(newResults, Math.ceil(offset / 25) + 1, Math.ceil(count / 25), interaction.user.id));
 
 				await i.deferUpdate();
 				return collector.resetTimer();
