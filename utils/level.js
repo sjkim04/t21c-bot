@@ -68,9 +68,16 @@ function createSearchSelectList(levelList, page, totalPage, userId) {
 
 	for (const levelData of levelList) {
 		const levelName = `${levelData.artist} - ${levelData.song}`;
+		let desc;
+		if (levelData.creator.length > 90 - levelData.id.toString().length) {
+			desc = `by ${levelData.creator.slice(0, 88 - levelData.id.toString().length)} | ID: ${levelData.id}`;
+		}
+		else {
+			desc = `by ${levelData.creator} | ID: ${levelData.id}`;
+		}
 		selectOptions.push({
 			label: levelName.slice(0, 100),
-			description: `by ${levelData.creator} | ID: ${levelData.id}`,
+			description: desc,
 			value: `showLevel_${userId}_${levelData.id}`,
 			emoji: { id: emojiData['diff'][levelData.diff] },
 		});
