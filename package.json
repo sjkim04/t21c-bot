@@ -9,6 +9,15 @@
     "jejudo": "^0.1.5"
   },
   "devDependencies": {
-    "eslint": "^8.36.0"
+    "eslint": "^8.36.0",
+    "nodemon": "^2.0.21"
+  },
+  "scripts": {
+    "test": "npx nodemon --signal SIGKILL index.js --debug"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "commands/*"
+    ]
   }
 }

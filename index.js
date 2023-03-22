@@ -1,9 +1,8 @@
 // Require the necessary discord.js classes
 const fs = require('node:fs');
 const path = require('node:path');
-const { Client, GatewayIntentBits, Collection, Team, User, ActivityType } = require('discord.js');
+const { Client, GatewayIntentBits, Collection, ActivityType } = require('discord.js');
 const { token } = require('./config.json');
-const { Jejudo } = require('jejudo');
 
 // Create a new client instance
 const client = new Client({
@@ -13,25 +12,6 @@ const client = new Client({
 	},
 });
 
-client.jejudo = new Jejudo(client, {
-	isOwner: (user) => owners.includes(user.id),
-	prefix: '<@1087228141300371578> ',
-	textCommand: 'jejudo',
-});
-
-let owners = [];
-
-client.once('ready', async () => {
-	const owner = (await client.application?.fetch())?.owner;
-
-	if (owner instanceof Team) {
-		owners = owner.members.map((x) => x.id);
-	}
-	else if (owner instanceof User) {
-		owners = [owner.id];
-	}
-	console.log('ready');
-});
 
 function loadCommands() {
 	client.commands = new Collection();

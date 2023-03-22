@@ -1,12 +1,14 @@
 const fs = require('node:fs');
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, EmbedBuilder } = require('discord.js');
+const axios = require('axios');
+const { apiHost } = require('../config.json');
 
 const infoJSON = fs.readFileSync('info.json');
 const info = JSON.parse(infoJSON);
 const emojiData = info['emojis'];
 const colorData = info['diffColors'];
 
-function createLevelEmbed(levelData, interaction) {
+module.exports.createLevelEmbed = (levelData, interaction) => {
 	let videoId;
 	if (levelData.vidLink !== '-5') {
 		const parsedUrl = new URL(levelData.vidLink);
@@ -35,9 +37,9 @@ function createLevelEmbed(levelData, interaction) {
 		.setFooter({ text: `ID: ${levelData.id}` });
 
 	return levelEmbed;
-}
+};
 
-function createLevelButtons(levelData) {
+module.exports.createLevelButtons = (levelData) => {
 	const levelButtonsRow = new ActionRowBuilder()
 		.addComponents([
 			new ButtonBuilder()
@@ -61,9 +63,9 @@ function createLevelButtons(levelData) {
 		]);
 
 	return levelButtonsRow;
-}
+};
 
-function createSearchSelectList(levelList, page, totalPage, userId) {
+module.exports.createSearchSelectList = (levelList, page, totalPage, userId, sort) => {
 	const selectOptions = [];
 
 	for (const levelData of levelList) {
@@ -93,6 +95,31 @@ function createSearchSelectList(levelList, page, totalPage, userId) {
 			]),
 		new ActionRowBuilder()
 			.addComponents([
+				new StringSelectMenuBuilder()
+					.setCustomId('sort')
+					.addOptions([
+						{
+							label: 'Newer Levels First',
+							value: 'RECENT_DESC',
+							emoji: { id: emojiData['sort']['RECENT_DESC'] },
+							default: (!sort ? true : sort === 'RECENT_DESC'),
+						},
+						{
+							label: 'Older Levels First',
+							value: 'RECENT_ASC',
+							emoji: { id: emojiData['sort']['RECENT_ASC'] },
+							default: sort === 'RECENT_ASC',
+						},
+						{
+							label: 'Random',
+							value: 'RANDOM',
+							emoji: { id: emojiData['sort']['RANDOM'] },
+							default: sort === 'RANDOM',
+						},
+					]),
+			]),
+		new ActionRowBuilder()
+			.addComponents([
 				new ButtonBuilder()
 					.setCustomId('prev')
 					.setLabel('Previous')
@@ -101,8 +128,7 @@ function createSearchSelectList(levelList, page, totalPage, userId) {
 				new ButtonBuilder()
 					.setCustomId('page')
 					.setLabel(`${page} / ${totalPage}`)
-					.setStyle(ButtonStyle.Secondary)
-					.setDisabled(true),
+					.setStyle(ButtonStyle.Secondary),
 				new ButtonBuilder()
 					.setCustomId('next')
 					.setLabel('Next')
@@ -115,6 +141,13 @@ function createSearchSelectList(levelList, page, totalPage, userId) {
 		content: 'Please select a level.',
 		components: levelSelectComponents,
 	};
-}
+};
 
-module.exports = { createLevelEmbed, createLevelButtons, createSearchSelectList };
+module.exports.getLevelApi = async (endpoint, queryOptions) => {
+	const api = axios.create({
+		baseURL: apiHost,
+	});
+	return await api.get(endpoint, {
+		params: queryOptions,
+	});
+};

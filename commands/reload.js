@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, Team, User } = require('discord.js');
 const path = require('node:path');
 const fs = require('node:fs');
 
@@ -29,10 +29,19 @@ module.exports = {
 		}
 
 		const client = interaction.client;
-		const ownerId = '503447721839951884';
+
+		let owners;
+		const owner = (await client.application?.fetch())?.owner;
+
+		if (owner instanceof Team) {
+			owners = owner.members.map((x) => x.id);
+		}
+		else if (owner instanceof User) {
+			owners = [owner.id];
+		}
 
 
-		if (interaction.user.id === ownerId) {
+		if (owners.includes(interaction.user.id)) {
 			await interaction.reply({ content: 'Reloading commands...', ephemeral: true });
 			await loadCommands();
 			await interaction.editReply('Reloaded all commands.');

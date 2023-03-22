@@ -5,7 +5,7 @@ module.exports = {
 		.setName('servercount')
 		.setDescription('servercount.'),
 	async execute(interaction) {
-		const serverCount = await interaction.client.guilds.cache.size;
+		const serverCount = interaction.client.guilds.cache.size;
 		await interaction.reply(`The bot is in ${serverCount} servers.`);
 	},
 };

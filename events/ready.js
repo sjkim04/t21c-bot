@@ -1,9 +1,61 @@
-const { Events } = require('discord.js');
+const { Events, Team, User } = require('discord.js');
+const { Jejudo } = require('jejudo');
+const { guildId } = require('../config.json');
+const fs = require('node:fs');
+const path = require('node:path');
 
 module.exports = {
 	name: Events.ClientReady,
 	once: true,
-	execute(client) {
-		console.log(`Ready! Logged in as ${client.user.tag}`);
+	async execute(client) {
+		const debug = process.argv[2] === '--debug';
+
+		let owners = [];
+
+		client.jejudo = new Jejudo(client, {
+			isOwner: (user) => owners.includes(user.id),
+			prefix: `<@${client.application.id}> `,
+			textCommand: 'jejudo',
+		});
+
+		const owner = (await client.application?.fetch())?.owner;
+
+		if (owner instanceof Team) {
+			owners = owner.members.map((x) => x.id);
+		}
+		else if (owner instanceof User) {
+			owners = [owner.id];
+		}
+
+
+		const commands = [];
+		const commandsPath = path.join(__dirname, '../commands');
+		const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+
+		for (const file of commandFiles) {
+			const command = require(`../commands/${file}`);
+			commands.push(command.data.toJSON());
+		}
+
+		commands.push(client.jejudo.commandJSON);
+
+		try {
+			console.log(`Started refreshing ${commands.length} application (/) commands.`);
+
+			let data;
+			if (debug) {
+				data = await client.application.commands.set(commands, guildId);
+			}
+			else {
+				data = await client.application.commands.set(commands);
+			}
+
+			console.log(`Successfully reloaded ${data.size} application (/) commands.`);
+		}
+		catch (error) {
+			console.error(error);
+		}
+
+		await console.log(`Ready! Logged in as ${client.user.tag}`);
 	},
 };
