@@ -1,10 +1,8 @@
-const fs = require('node:fs');
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, EmbedBuilder } = require('discord.js');
 const axios = require('axios');
 const { apiHost } = require('../config.json');
 
-const infoJSON = fs.readFileSync('info.json');
-const info = JSON.parse(infoJSON);
+const info = require('../info.json');
 const emojiData = info['emojis'];
 const colorData = info['diffColors'];
 
@@ -109,6 +107,18 @@ module.exports.createSearchSelectList = (levelList, page, totalPage, userId, sor
 							value: 'RECENT_ASC',
 							emoji: { id: emojiData['sort']['RECENT_ASC'] },
 							default: sort === 'RECENT_ASC',
+						},
+						{
+							label: 'Harder Levels First',
+							value: 'DIFF_DESC',
+							emoji: { id: emojiData['sort']['DIFF_DESC'] },
+							default: sort === 'DIFF_DESC',
+						},
+						{
+							label: 'Easier Levels First',
+							value: 'DIFF_ASC',
+							emoji: { id: emojiData['sort']['DIFF_ASC'] },
+							default: sort === 'DIFF_ASC',
 						},
 						{
 							label: 'Random',
