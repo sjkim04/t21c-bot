@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const { diffColors } = require('../info.json');
+const { diffColors, emojis } = require('../info.json');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -54,8 +54,6 @@ module.exports = {
 			rankedPosition = 1;
 		}
 
-
-		const textDiff = diff;
 		if (isNaN(+diff)) {
 			if (isNaN(+diff.slice(0, 1))) {
 				diff = null;
@@ -263,7 +261,7 @@ module.exports = {
 		const embed = new EmbedBuilder()
 			.setColor(diffColors[diff])
 			.setTitle(`General Score: ${generalScore} | Ranked Score: ${rankedScore}`)
-			.setDescription(`Difficulty: ${textDiff}\nX-Accuracy: ${xacc}%\nSpeed Trials: x${speed}\nRanked Position: ${rankedPosition}\nWorld's First: ${worldFirst || false}\nNo Early!!s: ${noEarly || false}`);
+			.setDescription(`Difficulty: ${interaction.client.emojis.cache.get(emojis['diff'][diff]).toString()}\nX-Accuracy: ${xacc}%\nSpeed Trials: x${speed}\nRanked Position: ${rankedPosition}\nWorld's First: ${worldFirst || false}\nNo Early!!s: ${noEarly || false}`);
 		await interaction.editReply({ embeds: [embed] });
 	},
 };
