@@ -35,15 +35,20 @@ module.exports.permsChecker = async (condition, permsName, interaction) => {
 	console.log(results);
 
 	if (!results) {
-		const embed = new EmbedBuilder()
-			.setColor(0xff0000)
-			.setTitle('No Permissions')
-			.setDescription(`:x: You do not have permission to run ${interaction.commandName}!\nThis requires the ${permsName} permission.`)
-			.setTimestamp();
+		const embed = this.createNoPermsMessage(interaction, permsName);
 
 		await interaction.reply({ embeds: [embed] });
 		return false;
 	}
 
 	return true;
+};
+
+module.exports.createNoPermsMessage = (interaction, permsName) => {
+	const embed = new EmbedBuilder()
+		.setColor(0xff0000)
+		.setTitle('No Permissions')
+		.setDescription(`:x: You do not have permission to run ${interaction.commandName}!\nThis requires the ${permsName} permission.`)
+		.setTimestamp();
+	return embed;
 };

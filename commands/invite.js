@@ -11,7 +11,7 @@ module.exports = {
 			.setTitle('Invite links!')
 			.setDescription(`Bot invite link:\n${interaction.client.generateInvite({
 				permissions: [PermissionFlagsBits.Administrator],
-				scopes: OAuth2Scopes.Bot,
+				scopes: [OAuth2Scopes.Bot],
 			})}\n\nT21+C Server:\nhttps://discord.gg/8FBDmAPrKe\n\nT21+C Management Sheet:\nhttps://docs.google.com/spreadsheets/d/1eaA1gyZ-6OWFthHFcVTfLV62U_MbpP6PHc8udN24iCg`);
 		interaction.reply({ embeds: [embed], ephemeral: true });
 	},

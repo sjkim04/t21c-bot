@@ -1,6 +1,7 @@
 const { Events, Team, User } = require('discord.js');
 const { Jejudo } = require('jejudo');
 const { guildId } = require('../config.json');
+const { createNoPermsMessage } = require('../utils/message');
 const fs = require('node:fs');
 const path = require('node:path');
 
@@ -26,6 +27,7 @@ module.exports = {
 			isOwner: (user) => owners.includes(user.id),
 			prefix: `<@${client.application.id}> `,
 			textCommand: 'jejudo',
+			noPermission: i => i.reply({ embed: createNoPermsMessage(i, 'Bot Owner') }),
 		});
 
 

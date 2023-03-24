@@ -5,6 +5,7 @@ module.exports = {
 	name: Events.InteractionCreate,
 	async execute(interaction) {
 		interaction.client.jejudo.handleInteraction(interaction);
+
 		if (interaction.isStringSelectMenu()) {
 			const name = interaction.customId.split('_')[0];
 			const handler = interaction.client.selectHandlers.get(name);
@@ -59,9 +60,9 @@ module.exports = {
 					}
 				}
 			}
+		}
 
-			if (!interaction.isChatInputCommand()) return;
-
+		if (interaction.isChatInputCommand()) {
 			const command = interaction.client.commands.get(interaction.commandName);
 
 			if (!command && interaction.commandName !== 'jejudo') {
