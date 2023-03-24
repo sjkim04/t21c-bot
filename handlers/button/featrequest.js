@@ -8,8 +8,8 @@ module.exports = {
 	},
 	async execute(interaction) {
 
-		await interaction.deferUpdate();
 		if (interaction.customId.split('_')[1] === 'accept') {
+			interaction.deferUpdate();
 			const embedMessage = interaction.message;
 			const request = embedMessage.embeds[0].data.description;
 			const type = interaction.customId.split('_')[3];
@@ -57,7 +57,7 @@ module.exports = {
 			const reqCommand = interaction.client.application.commands.cache.find(command => command.name = 'featrequest');
 			try {
 				await dmChannel.send(`Your feature request for ${type} has been rejected.\nYour request:\n${quote(request)}\nReason:\n${quote(reason)}\n\nYou can make another feature request using the </${reqCommand.name}:${reqCommand.id}> command.`);
-				await interaction.followUp({ content: 'DM sent :+1:' });
+				await modalResp.followUp({ content: 'DM sent :+1:' });
 
 				await embedMessage.edit({ components: disableComponents(embedMessage.components) });
 			}
