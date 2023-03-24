@@ -2,5 +2,11 @@
   "token": "",
   "clientId": "",
   "guildId": "",
-  "apiHost": ""
+  "apiHost": "",
+  "channels": {
+    "featrequest":{
+      "api": "",
+      "bot": ""
+    }
+  }
 }
