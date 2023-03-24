@@ -1,9 +1,13 @@
-const { SlashCommandBuilder, Team, User } = require('discord.js');
+const { SlashCommandBuilder } = require('discord.js');
 const path = require('node:path');
 const fs = require('node:fs');
 
 
 module.exports = {
+	checkPerms: {
+		condition: interaction => interaction.client.jejudo.isOwner(interaction.user),
+		permsName: 'Bot Owner',
+	},
 	data: new SlashCommandBuilder()
 		.setName('reload')
 		.setDescription('Reloads commands'),
@@ -29,19 +33,7 @@ module.exports = {
 		}
 
 		const client = interaction.client;
-
-		let owners;
-		const owner = (await client.application?.fetch())?.owner;
-
-		if (owner instanceof Team) {
-			owners = owner.members.map((x) => x.id);
-		}
-		else if (owner instanceof User) {
-			owners = [owner.id];
-		}
-
-
-		if (owners.includes(interaction.user.id)) {
+		if (interaction.client.jejudo.isOwner(interaction.user)) {
 			await interaction.reply({ content: 'Reloading commands...', ephemeral: true });
 			await loadCommands();
 			await interaction.editReply('Reloaded all commands.');

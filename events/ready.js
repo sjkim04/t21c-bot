@@ -11,13 +11,6 @@ module.exports = {
 		const debug = process.argv[2] === '--debug';
 
 		let owners = [];
-
-		client.jejudo = new Jejudo(client, {
-			isOwner: (user) => owners.includes(user.id),
-			prefix: `<@${client.application.id}> `,
-			textCommand: 'jejudo',
-		});
-
 		const owner = (await client.application?.fetch())?.owner;
 
 		if (owner instanceof Team) {
@@ -26,6 +19,14 @@ module.exports = {
 		else if (owner instanceof User) {
 			owners = [owner.id];
 		}
+
+
+		client.jejudo = new Jejudo(client, {
+			owners,
+			isOwner: (user) => owners.includes(user.id),
+			prefix: `<@${client.application.id}> `,
+			textCommand: 'jejudo',
+		});
 
 
 		const commands = [];

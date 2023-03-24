@@ -1,32 +1,95 @@
 const { Events } = require('discord.js');
+const { permsChecker } = require('../utils/message');
 
 module.exports = {
 	name: Events.InteractionCreate,
 	async execute(interaction) {
 		interaction.client.jejudo.handleInteraction(interaction);
 		if (interaction.isStringSelectMenu()) {
-			const values = interaction.values[0];
-			if (interaction.customId === 'showLevel' && values.split('_')[1] === interaction.user.id) {
-				const handler = require('../handlers/showlevel');
-				handler.execute(interaction);
+			const name = interaction.customId.split('_')[0];
+			const handler = interaction.client.selectHandlers.get(name);
+			if (handler) {
+				if ('checkPerms' in handler) {
+					const check = await permsChecker(handler.checkPerms.condition, handler.checkPerms.permsName, interaction);
+					if (check) {
+						try {
+							handler.execute(interaction);
+						}
+						catch (error) {
+							console.error(`Error handling ${name}`);
+							console.error(error);
+						}
+					}
+				}
+				else {
+					try {
+						handler.execute(interaction);
+					}
+					catch (error) {
+						console.error(`Error handling ${name}`);
+						console.error(error);
+					}
+				}
 			}
 		}
 
-		if (!interaction.isChatInputCommand()) return;
+		if (interaction.isButton()) {
+			const name = interaction.customId.split('_')[0];
+			const handler = interaction.client.buttonHandlers.get(name);
+			if (handler) {
+				if ('checkPerms' in handler) {
+					const check = await permsChecker(handler.checkPerms.condition, handler.checkPerms.permsName, interaction);
+					if (check) {
+						try {
+							handler.execute(interaction);
+						}
+						catch (error) {
+							console.error(`Error handling ${name}`);
+							console.error(error);
+						}
+					}
+				}
+				else {
+					try {
+						handler.execute(interaction);
+					}
+					catch (error) {
+						console.error(`Error handling ${name}`);
+						console.error(error);
+					}
+				}
+			}
 
-		const command = interaction.client.commands.get(interaction.commandName);
+			if (!interaction.isChatInputCommand()) return;
 
-		if (!command) {
-			console.error(`No command matching ${interaction.commandName} was found.`);
-			return;
-		}
+			const command = interaction.client.commands.get(interaction.commandName);
 
-		try {
-			await command.execute(interaction);
-		}
-		catch (error) {
-			console.error(`Error executing ${interaction.commandName}`);
-			console.error(error);
+			if (!command && interaction.commandName !== 'jejudo') {
+				console.error(`No command matching ${interaction.commandName} was found.`);
+				return;
+			}
+
+			if (command.checkPerms) {
+				const check = await permsChecker(command.checkPerms.condition, command.checkPerms.permsName, interaction);
+				if (check) {
+					try {
+						command.execute(interaction);
+					}
+					catch (error) {
+						console.error(`Error executing ${interaction.commandName}`);
+						console.error(error);
+					}
+				}
+			}
+			else {
+				try {
+					command.execute(interaction);
+				}
+				catch (error) {
+					console.error(`Error executing ${interaction.commandName}`);
+					console.error(error);
+				}
+			}
 		}
 	},
 };

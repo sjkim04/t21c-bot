@@ -48,8 +48,35 @@ function loadEvents() {
 	}
 }
 
+function loadHandlers() {
+	client.selectHandlers = new Collection;
+	client.buttonHandlers = new Collection;
+
+	const handlersPath = path.join(__dirname, 'handlers');
+	const selectPath = path.join(handlersPath, 'selectMenu');
+	const buttonPath = path.join(handlersPath, 'button');
+
+	const selectFiles = fs.readdirSync(selectPath).filter(file => file.endsWith('.js'));
+	const buttonFiles = fs.readdirSync(buttonPath).filter(file => file.endsWith('.js'));
+
+	for (const file of selectFiles) {
+		const filePath = path.join(selectPath, file);
+		const handler = require(filePath);
+
+		client.selectHandlers.set(file.split('.')[0], handler);
+	}
+
+	for (const file of buttonFiles) {
+		const filePath = path.join(buttonPath, file);
+		const handler = require(filePath);
+
+		client.buttonHandlers.set(file.split('.')[0], handler);
+	}
+}
+
 loadCommands();
 loadEvents();
+loadHandlers();
 
 client.queue = new Map();
 

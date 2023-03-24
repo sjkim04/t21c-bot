@@ -1,6 +1,6 @@
-const { ComponentType, StringSelectMenuBuilder, ActionRowBuilder, ButtonBuilder } = require('discord.js');
+const { ComponentType, StringSelectMenuBuilder, ActionRowBuilder, ButtonBuilder, EmbedBuilder } = require('discord.js');
 
-function disableComponents(components, excl) {
+module.exports.disableComponents = (components, excl) => {
 	const rows = [];
 	if (!Array.isArray(excl)) excl = [excl];
 
@@ -28,6 +28,22 @@ function disableComponents(components, excl) {
 	}
 
 	return rows;
-}
+};
 
-module.exports = { disableComponents };
+module.exports.permsChecker = async (condition, permsName, interaction) => {
+	const results = await condition(interaction);
+	console.log(results);
+
+	if (!results) {
+		const embed = new EmbedBuilder()
+			.setColor(0xff0000)
+			.setTitle('No Permissions')
+			.setDescription(`:x: You do not have permission to run ${interaction.commandName}!\nThis requires the ${permsName} permission.`)
+			.setTimestamp();
+
+		await interaction.reply({ embeds: [embed] });
+		return false;
+	}
+
+	return true;
+};

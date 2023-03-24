@@ -1,9 +1,13 @@
 const axios = require('axios');
-const { apiHost } = require('../config.json');
-const levelUtils = require('../utils/level');
+const { apiHost } = require('../../config.json');
+const levelUtils = require('../../utils/level');
 
 module.exports = {
 	async execute(interaction) {
+		if (!interaction.customId.split('_')[1] === interaction.user.id) {
+			return;
+		}
+
 		await interaction.deferUpdate();
 
 		const levelId = interaction.values[0].split('_')[2];
@@ -18,6 +22,6 @@ module.exports = {
 		const levelEmbed = levelUtils.createLevelEmbed(levelData, interaction);
 		const levelButtonsRow = levelUtils.createLevelButtons(levelData);
 
-		await interaction.editReply({ content: '', embeds: [levelEmbed], components: [levelButtonsRow] });
+		await interaction.editReply({ embeds: [levelEmbed], components: [levelButtonsRow] });
 	},
 };

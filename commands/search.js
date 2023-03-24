@@ -36,7 +36,7 @@ module.exports = {
 			}
 
 			if (response.data.count === 1) {
-				interaction.editReply({ embeds: [levelUtils.createLevelEmbed(results[0])], components: levelUtils.createLevelButtons(results[0]) });
+				interaction.editReply({ embeds: [levelUtils.createLevelEmbed(results[0], interaction)], components: [levelUtils.createLevelButtons(results[0])] });
 				return;
 			}
 

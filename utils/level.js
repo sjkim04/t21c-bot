@@ -78,7 +78,7 @@ module.exports.createSearchSelectList = (levelList, page, totalPage, userId, sor
 		selectOptions.push({
 			label: levelName.slice(0, 100),
 			description: desc,
-			value: `showLevel_${userId}_${levelData.id}`,
+			value: `showLevel_${levelData.id}`,
 			emoji: { id: emojiData['diff'][levelData.diff] },
 		});
 	}
@@ -87,7 +87,7 @@ module.exports.createSearchSelectList = (levelList, page, totalPage, userId, sor
 		new ActionRowBuilder()
 			.addComponents([
 				new StringSelectMenuBuilder()
-					.setCustomId('showLevel')
+					.setCustomId(`showLevel_${userId}`)
 					.setPlaceholder('Please select a level.')
 					.addOptions(selectOptions),
 			]),
