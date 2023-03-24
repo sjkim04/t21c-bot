@@ -1,4 +1,4 @@
-const { quote, ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
+const { codeBlock, ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
 const { disableComponents } = require('../../utils/message');
 
 module.exports = {
@@ -16,7 +16,7 @@ module.exports = {
 
 			const dmChannel = await interaction.client.users.createDM(interaction.customId.split('_')[2]);
 			try {
-				await dmChannel.send(`Your feature request for ${type} has been accepted! Your request:\n${quote(request)}\n\nWe'll develop the feature soon, so please hang tight!`);
+				await dmChannel.send(`Your feature request for ${type} has been accepted! Your request:\n${codeBlock(request)}\n\nWe'll develop the feature soon, so please hang tight!`);
 				await interaction.followUp({ content: 'DM sent :+1:' });
 
 				await embedMessage.edit({ components: disableComponents(embedMessage.components) });
@@ -56,7 +56,7 @@ module.exports = {
 
 			const reqCommand = interaction.client.application.commands.cache.find(command => command.name = 'featrequest');
 			try {
-				await dmChannel.send(`Your feature request for ${type} has been rejected.\nYour request:\n${quote(request)}\nReason:\n${quote(reason)}\n\nYou can make another feature request using the </${reqCommand.name}:${reqCommand.id}> command.`);
+				await dmChannel.send(`Your feature request for ${type} has been rejected.\nYour request:\n${codeBlock(request)}\nReason:\n${codeBlock(reason)}\n\nYou can make another feature request using the </${reqCommand.name}:${reqCommand.id}> command.`);
 				await modalResp.followUp({ content: 'DM sent :+1:' });
 
 				await embedMessage.edit({ components: disableComponents(embedMessage.components) });
