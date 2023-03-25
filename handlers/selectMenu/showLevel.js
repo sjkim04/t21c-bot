@@ -10,7 +10,7 @@ module.exports = {
 
 		await interaction.deferUpdate();
 
-		const levelId = interaction.values[0].split('_')[2];
+		const levelId = interaction.values[0].split('_')[1];
 
 		const api = axios.create({
 			baseURL: apiHost,
@@ -22,6 +22,6 @@ module.exports = {
 		const levelEmbed = levelUtils.createLevelEmbed(levelData, interaction);
 		const levelButtonsRow = levelUtils.createLevelButtons(levelData);
 
-		await interaction.editReply({ embeds: [levelEmbed], components: [levelButtonsRow] });
+		await interaction.editReply({ content: '', embeds: [levelEmbed], components: [levelButtonsRow] });
 	},
 };
