@@ -32,7 +32,6 @@ module.exports.disableComponents = (components, excl) => {
 
 module.exports.permsChecker = async (condition, permsName, interaction) => {
 	const results = await condition(interaction);
-	console.log(results);
 
 	if (!results) {
 		const embed = this.createNoPermsMessage(interaction, permsName);
