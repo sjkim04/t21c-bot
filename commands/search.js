@@ -92,11 +92,11 @@ module.exports = {
 
 					const newPage = modalResp.fields.getTextInputValue('pageNum');
 					if (isNaN(+newPage)) {
-						modalResp.followUp({ content: 'The page number specified was invalid!', ephemeral: true });
+						modalResp.reply({ content: 'The page number specified was invalid!', ephemeral: true });
 						return;
 					}
 					if (+newPage < 1 || +newPage > Math.ceil(count / 25)) {
-						modalResp.followUp({ content: 'The page number specified was out of range!', ephemeral: true });
+						modalResp.reply({ content: 'The page number specified was out of range!', ephemeral: true });
 						return;
 					}
 
