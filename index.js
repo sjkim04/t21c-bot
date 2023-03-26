@@ -2,7 +2,10 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { Client, GatewayIntentBits, Collection, ActivityType } = require('discord.js');
-const { token } = require('./config.json');
+const { token, sentryURL } = require('./config.json');
+
+const Sentry = require('@sentry/node');
+require('@sentry/tracing');
 
 // Create a new client instance
 const client = new Client({
@@ -73,6 +76,11 @@ function loadHandlers() {
 		client.buttonHandlers.set(file.split('.')[0], handler);
 	}
 }
+
+Sentry.init({
+	dsn: sentryURL,
+	tracesSampleRate: 0.5,
+});
 
 loadCommands();
 loadEvents();

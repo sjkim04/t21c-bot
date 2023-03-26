@@ -2,12 +2,6 @@ const { Events } = require('discord.js');
 const { permsChecker } = require('../utils/message');
 const Sentry = require('@sentry/node');
 require('@sentry/tracing');
-const { sentryURL } = require('../config.json');
-
-Sentry.init({
-	dsn: sentryURL,
-	tracesSampleRate: 0.5,
-});
 
 module.exports = {
 	name: Events.InteractionCreate,
