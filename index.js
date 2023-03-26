@@ -16,6 +16,9 @@ const client = new Client({
 });
 
 
+client.debug = process.argv[2] === '--debug';
+
+
 function loadCommands() {
 	client.commands = new Collection();
 
@@ -80,6 +83,7 @@ function loadHandlers() {
 Sentry.init({
 	dsn: sentryURL,
 	tracesSampleRate: 0.5,
+	environment: client.debug ? 'dev' : 'production',
 });
 
 loadCommands();

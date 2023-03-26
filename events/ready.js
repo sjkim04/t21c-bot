@@ -9,7 +9,7 @@ module.exports = {
 	name: Events.ClientReady,
 	once: true,
 	async execute(client) {
-		const debug = process.argv[2] === '--debug';
+		const debug = client.debug;
 
 		let owners = [];
 		const owner = (await client.application?.fetch())?.owner;
