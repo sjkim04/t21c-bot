@@ -82,6 +82,7 @@ function loadHandlers() {
 
 Sentry.init({
 	dsn: sentryURL,
+	release: `t21c-bot@${process.env.npm_package_version}`,
 	tracesSampleRate: 0.5,
 	environment: client.debug ? 'dev' : 'production',
 });
