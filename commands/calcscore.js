@@ -36,6 +36,15 @@ module.exports = {
 			option
 				.setName('noearly')
 				.setDescription('Whether if the pass doesn\'t have any Early!!s'),
+		)
+		.addStringOption(option =>
+			option
+				.setName('version')
+				.setDescription('The version of the score formula')
+				.setChoices(
+					{ name: '2023-03-31 (Speed Trials Adjustment)', value: 'speedBuff1' },
+					{ name: '2023-03-21 (Initial)', value: 'initial' },
+				),
 		),
 	async execute(interaction) {
 		await interaction.deferReply();
@@ -46,6 +55,12 @@ module.exports = {
 		let rankedPosition = interaction.options.getNumber('rankedpos');
 		const worldFirst = interaction.options.getBoolean('worldfirst');
 		const noEarly = interaction.options.getBoolean('noearly');
+		const ver = interaction.options.getString('version');
+
+		const displayVer = {
+			speedBuff1: '2023-03-31 (Speed Trials Adjustment)',
+			initial: '2023-03-21 (Initial)',
+		};
 
 		if (!speed) {
 			speed = 1;
@@ -249,7 +264,17 @@ module.exports = {
 			xaccMulti = Math.pow(xacc - 94, 1.6) / 12.1326 + 0.9176;
 		}
 
-		const speedMulti = Math.max(Math.min(1, Math.pow(1 / speed, 2.25) * 1.9775 - 0.5958), 0.5);
+		let speedMulti;
+		if (ver === 'initial') {
+			speedMulti = Math.max(Math.min(1, Math.pow(1 / speed, 2.25) * 1.9775 - 0.5958), 0.5);
+		}
+		else if (ver === 'speedBuff1' || !ver) {
+			if (speed < 1) {speedMulti = 0;}
+			else if (speed < 1.25) {speedMulti = Math.pow(1 / speed, 2.5) + (Math.pow(1 / speed, 2) - Math.pow(1 / speed, 0.5)) * 0.2884;}
+			else if (speed <= 1.45) {speedMulti = 0.5;}
+			else if (speed <= 1.5) {speedMulti = 0.75 + Math.sin(Math.PI * 20 * (speed - 1.375)) * 0.25;}
+			else {speedMulti = Math.pow(speed, 1.3) - Math.pow(speed, 1.1455) + Math.pow(speed - 1, 0.1566);}
+		}
 
 		const noEarlyMulti = noEarly ? 1.1 : 1;
 
@@ -261,7 +286,8 @@ module.exports = {
 		const embed = new EmbedBuilder()
 			.setColor(diffColors[diff])
 			.setTitle(`General Score: ${generalScore} | Ranked Score: ${rankedScore}`)
-			.setDescription(`Difficulty: ${interaction.client.emojis.cache.get(emojis['diff'][diff]).toString()}\nX-Accuracy: ${xacc}%\nSpeed Trials: x${speed}\nRanked Position: ${rankedPosition}\nWorld's First: ${worldFirst || false}\nNo Early!!s: ${noEarly || false}`);
+			.setDescription(`Difficulty: ${interaction.client.emojis.cache.get(emojis['diff'][diff]).toString()}\nX-Accuracy: ${xacc}%\nSpeed Trials: x${speed}\nRanked Position: ${rankedPosition}\nWorld's First: ${worldFirst || false}\nNo Early!!s: ${noEarly || false}${ver ? `\nVersion: ${displayVer[ver]}` : ''}`);
+
 		await interaction.editReply({ embeds: [embed] });
 	},
 };
