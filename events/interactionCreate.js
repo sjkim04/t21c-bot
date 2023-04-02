@@ -13,7 +13,7 @@ module.exports = {
 			const handler = interaction.client.selectHandlers.get(name);
 			if (handler) {
 				if ('checkPerms' in handler) {
-					const check = await permsChecker(handler.checkPerms.condition, handler.checkPerms.permsName, interaction);
+					const check = await permsChecker(handler.checkPerms.condition, handler.checkPerms.permsName, handler.checkPerms.guildOnly, interaction);
 					if (check) {
 						try {
 							handler.execute(interaction);
@@ -43,7 +43,7 @@ module.exports = {
 			const handler = interaction.client.buttonHandlers.get(name);
 			if (handler) {
 				if ('checkPerms' in handler) {
-					const check = await permsChecker(handler.checkPerms.condition, handler.checkPerms.permsName, interaction);
+					const check = await permsChecker(handler.checkPerms.condition, handler.checkPerms.permsName, handler.checkPerms.guildOnly, interaction);
 					if (check) {
 						try {
 							handler.execute(interaction);
@@ -78,7 +78,7 @@ module.exports = {
 			}
 
 			if (command.checkPerms) {
-				const check = await permsChecker(command.checkPerms.condition, command.checkPerms.permsName, interaction);
+				const check = await permsChecker(command.checkPerms.condition, command.checkPerms.permsName, command.checkPerms.guildOnly, interaction);
 				if (check) {
 					try {
 						command.execute(interaction);

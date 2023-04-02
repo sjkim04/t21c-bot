@@ -30,7 +30,16 @@ module.exports.disableComponents = (components, excl) => {
 	return rows;
 };
 
-module.exports.permsChecker = async (condition, permsName, interaction) => {
+module.exports.permsChecker = async (condition, permsName, guildOnly, interaction) => {
+	if (guildOnly && !interaction.inGuild()) {
+		const embed = new EmbedBuilder()
+			.setColor(0xff0000)
+			.setTitle('Server Only')
+			.setDescription(`:x: The ${interaction.commandName} command cannot be run in DMs!\nPlease run this in a server.`)
+			.setTimestamp();
+		await interaction.reply({ embeds: [embed] });
+		return false;
+	}
 	const results = await condition(interaction);
 
 	if (!results) {
