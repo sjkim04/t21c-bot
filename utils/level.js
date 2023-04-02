@@ -12,6 +12,7 @@ module.exports.createLevelEmbed = (levelData, interaction) => {
 		const parsedUrl = new URL(levelData.vidLink);
 		if ([ 'youtube.com', 'www.youtube.com' ].includes(parsedUrl.host)) videoId = parsedUrl.searchParams.get('v');
 		if ([ 'youtu.be' ].includes(parsedUrl.hostname)) videoId = parsedUrl.pathname.slice(1);
+		if (parsedUrl.pathname.includes('shorts')) videoId = parsedUrl.pathname.split('/')[2];
 	}
 	else {
 		videoId = null;
@@ -19,11 +20,15 @@ module.exports.createLevelEmbed = (levelData, interaction) => {
 	}
 
 	const levelEmbed = new EmbedBuilder()
-		.setColor(colorData[levelData.diff])
+		.setColor(!colorData[levelData.diff] ? colorData['0'] : colorData[levelData.diff])
 		.setTitle(`${levelData.artist} - ${levelData.song}`)
 		.setDescription(`Level by ${levelData.creator}`)
 		.addFields(
-			{ name: 'Difficulty', 'value': interaction.client.emojis.cache.get(emojiData['diff'][levelData.diff]).toString(), inline: true },
+			{
+				name: 'Difficulty',
+				value: !emojiData['diff'][levelData.diff] ? levelData.diff.toString() : interaction.client.emojis.cache.get(emojiData['diff'][levelData.diff]).toString(),
+				inline: true,
+			},
 			{
 				name: 'Diff Strength',
 				value: (!levelData.diffstrength ? interaction.client.emojis.cache.get(emojiData['misc']['question']).toString() : interaction.client.emojis.cache.get(emojiData['diffStrength'][levelData.diffstrength]).toString()),
