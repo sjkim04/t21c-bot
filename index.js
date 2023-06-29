@@ -17,6 +17,7 @@ const client = new Client({
 
 
 client.debug = process.argv[2] === '--debug';
+client.atc = process.argv[2] === '--atc';
 
 
 function loadCommands() {

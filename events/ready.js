@@ -10,6 +10,7 @@ module.exports = {
 	once: true,
 	async execute(client) {
 		const debug = client.debug;
+		const atc = client.atc;
 
 		let owners = [];
 		const owner = (await client.application?.fetch())?.owner;
@@ -37,16 +38,26 @@ module.exports = {
 
 		for (const file of commandFiles) {
 			const command = require(`../commands/${file}`);
-			commands.push(command.data.toJSON());
+			if (atc) {
+				if (command.data.name !== 'dobbyisfree') return;
+				commands.push(command.data.toJSON());
+			}
+			else {
+				if (command.data.name === 'dobbyisfree') return;
+				commands.push(command.data.toJSON());
+			}
 		}
 
-		commands.push(client.jejudo.commandJSON);
+		if (!atc) commands.push(client.jejudo.commandJSON);
 
 		try {
 			console.log(`Started refreshing ${commands.length} application (/) commands.`);
 
 			let data;
-			if (debug) {
+			if (atc) {
+				data = await client.application.commands.set(commands, '1073949499480875078');
+			}
+			else if (debug) {
 				data = await client.application.commands.set(commands, guildId);
 			}
 			else {
