@@ -39,12 +39,10 @@ module.exports = {
 		for (const file of commandFiles) {
 			const command = require(`../commands/${file}`);
 			if (atc) {
-				if (command.data.name !== 'dobbyisfree') return;
-				commands.push(command.data.toJSON());
+				if (command.data.name === 'dobbyisfree') commands.push(command.data.toJSON());
 			}
-			else {
-				if (command.data.name === 'dobbyisfree') return;
-				commands.push(command.data.toJSON());
+			else if (!atc) {
+				if (command.data.name !== 'dobbyisfree') commands.push(command.data.toJSON());
 			}
 		}
 
@@ -70,6 +68,6 @@ module.exports = {
 			console.error(error);
 		}
 
-		await console.log(`Ready! Logged in as ${client.user.tag}`);
+		console.log(`Ready! Logged in as ${client.user.tag}`);
 	},
 };
