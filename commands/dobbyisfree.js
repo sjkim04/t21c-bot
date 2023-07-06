@@ -5,6 +5,6 @@ module.exports = {
 		.setName('dobbyisfree')
 		.setDescription('dobby is freeeee'),
 	async execute(interaction) {
-		await interaction.reply({ content: '/atcisbest', ephemeral: true });
+		await interaction.reply({ content: '/atcisnotover', ephemeral: true });
 	},
 };
