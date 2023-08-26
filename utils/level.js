@@ -29,11 +29,6 @@ module.exports.createLevelEmbed = (levelData, interaction) => {
 				value: !emojiData['diff'][levelData.diff] ? levelData.diff.toString() : interaction.client.emojis.cache.get(emojiData['diff'][levelData.diff]).toString(),
 				inline: true,
 			},
-			{
-				name: 'Diff Strength',
-				value: (!levelData.diffstrength ? interaction.client.emojis.cache.get(emojiData['misc']['question']).toString() : interaction.client.emojis.cache.get(emojiData['diffStrength'][levelData.diffstrength]).toString()),
-				inline: true,
-			},
 		)
 		.setImage((!videoId ? 'https://media.discordapp.net/attachments/1081897177594470471/1087255551211208764/c.png' : `https://i.ytimg.com/vi/${videoId}/original.jpg`))
 		.setTimestamp()
