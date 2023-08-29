@@ -55,7 +55,7 @@ module.exports = {
 		let speed = interaction.options.getNumber('speed');
 		let rankedPosition = interaction.options.getNumber('rankedpos');
 		const worldFirst = interaction.options.getBoolean('worldfirst');
-		const noEarly = interaction.options.getBoolean('noearly');
+		let noEarly = interaction.options.getBoolean('noearly');
 		const ver = interaction.options.getString('version');
 
 		const displayVer = {
