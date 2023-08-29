@@ -19,11 +19,24 @@ module.exports = {
             await interaction.reply({ content: 'Please split judgements with SPACES, and only place 7 numbers.', ephemeral: true });
             return;
         }
-        for (const judgement in judgements) {
-            if (isNaN(judgement)) {
-                await interaction.reply('Please put judgement numbers here, not rubbish.')
-                return;
-            }
+
+        const isNum = judgements.every((num => !isNaN(num)));
+        if (!isNum) {
+            await interaction.reply({ content: 'Please put judgement numbers here, not rubbish.', ephemeral: true })
+            return;
+        }
+        judgements = judgements.map(num => Number(num));
+
+        const isPositive = judgements.every((num => num >= 0));
+        if (!isPositive) {
+            await interaction.reply({ content: 'Why would you enter negative values????????', ephemeral: true });
+            return;
+        }
+
+        const isInt = judgements.every(num => num % 1 === 0);
+        if (!isInt) {
+            await interaction.reply({ content: 'Why would you enter decimals????', ephemeral: true });
+            return;
         }
 
         const tEarly = judgements[0];
@@ -36,8 +49,8 @@ module.exports = {
 
         const judgeCount = tEarly + early + earlyP + perfect + lateP + late + tLate;
 
-        const acc = (perfect * 0.01) + (((earlyP + perfect + lateP) / judgeCount) * 10000);
-        const xacc = Math.round((perfect + (earlyP + lateP) * 75 + (early + late) * 40 + (tEarly + tLate) * 20) / judgeCount * 10000) * 0.01;
+        const acc = Math.round(((perfect * 0.01) + (((earlyP + perfect + lateP) / judgeCount) * 100)) * 100000) / 100000;
+        const xacc = Math.round(((perfect * 100) + ((earlyP + lateP) * 75) + ((early + late) * 40) + ((tEarly + tLate) * 20)) / judgeCount * 100000) / 100000;
 
         const embed = new EmbedBuilder()
             .setTitle(`X-Accuracy: ${xacc}% | Legacy Accuracy: ${acc}%`)
