@@ -42,6 +42,7 @@ module.exports = {
 				.setName('version')
 				.setDescription('The version of the score formula')
 				.setChoices(
+					{ name: '2023-08-01 (Accuracy Score Adjustment)', value: 'accNerf1' },
 					{ name: '2023-03-31 (Speed Trials Adjustment)', value: 'speedBuff1' },
 					{ name: '2023-03-21 (Initial)', value: 'initial' },
 				),
@@ -58,6 +59,7 @@ module.exports = {
 		const ver = interaction.options.getString('version');
 
 		const displayVer = {
+			accNerf1: '2023-08-01 (Accuracy Score Adjustment)',
 			speedBuff1: '2023-03-31 (Speed Trials Adjustment)',
 			initial: '2023-03-21 (Initial)',
 		};
@@ -67,6 +69,9 @@ module.exports = {
 		}
 		if (!rankedPosition) {
 			rankedPosition = 1;
+		}
+		if (!noEarly && xacc === 100) {
+			noEarly = true;
 		}
 
 		if (isNaN(+diff)) {
@@ -90,158 +95,155 @@ module.exports = {
 		diff = Math.round(diff * 100) / 100;
 
 		let scoreBase;
-		if (diff < 1) {scoreBase = 0;}
+		if (diff < 1) { scoreBase = 0; }
 		else {
 			switch (diff) {
-			case 1:
-				scoreBase = 0.05;
-				break;
-			case 2:
-				scoreBase = 0.1;
-				break;
-			case 3:
-				scoreBase = 0.2;
-				break;
-			case 4:
-				scoreBase = 0.3;
-				break;
-			case 5:
-				scoreBase = 0.4;
-				break;
-			case 6:
-				scoreBase = 0.5;
-				break;
-			case 7:
-				scoreBase = 0.6;
-				break;
-			case 8:
-				scoreBase = 0.7;
-				break;
-			case 9:
-				scoreBase = 0.8;
-				break;
-			case 10:
-				scoreBase = 0.9;
-				break;
-			case 11:
-				scoreBase = 1;
-				break;
-			case 12:
-				scoreBase = 2;
-				break;
-			case 13:
-				scoreBase = 3;
-				break;
-			case 14:
-				scoreBase = 5;
-				break;
-			case 15:
-				scoreBase = 10;
-				break;
-			case 16:
-				scoreBase = 15;
-				break;
-			case 17:
-				scoreBase = 20;
-				break;
-			case 18:
-				scoreBase = 30;
-				break;
-			case 18.5:
-				scoreBase = 45;
-				break;
-			case 19:
-				scoreBase = 60;
-				break;
-			case 19.5:
-				scoreBase = 75;
-				break;
-			case 20:
-				scoreBase = 100;
-				break;
-			case 20.05:
-				scoreBase = 110;
-				break;
-			case 20.1:
-				scoreBase = 120;
-				break;
-			case 20.15:
-				scoreBase = 130;
-				break;
-			case 20.2:
-				scoreBase = 140;
-				break;
-			case 20.25:
-				scoreBase = 150;
-				break;
-			case 20.3:
-				scoreBase = 160;
-				break;
-			case 20.35:
-				scoreBase = 170;
-				break;
-			case 20.4:
-				scoreBase = 180;
-				break;
-			case 20.45:
-				scoreBase = 190;
-				break;
-			case 20.5:
-				scoreBase = 200;
-				break;
-			case 20.55:
-				scoreBase = 210;
-				break;
-			case 20.6:
-				scoreBase = 220;
-				break;
-			case 20.65:
-				scoreBase = 230;
-				break;
-			case 20.7:
-				scoreBase = 240;
-				break;
-			case 20.75:
-				scoreBase = 250;
-				break;
-			case 20.8:
-				scoreBase = 275;
-				break;
-			case 20.85:
-				scoreBase = 300;
-				break;
-			case 20.9:
-				scoreBase = 350;
-				break;
-			case 20.95:
-				scoreBase = 400;
-				break;
-			case 21:
-				scoreBase = 500;
-				break;
-			case 21.05:
-				scoreBase = 700;
-				break;
-			case 21.1:
-				scoreBase = 1000;
-				break;
-			case 21.15:
-				scoreBase = 1600;
-				break;
-			case 21.2:
-				scoreBase = 2000;
-				break;
-			case 21.25:
-				scoreBase = 3000;
-				break;
-			case 21.3:
-				scoreBase = 5000;
-				break;
-			case 21.35:
-				scoreBase = 10000;
-				break;
-			default:
-				scoreBase = null;
+				case 1:
+					scoreBase = 0.05;
+					break;
+				case 2:
+					scoreBase = 0.1;
+					break;
+				case 3:
+					scoreBase = 0.2;
+					break;
+				case 4:
+					scoreBase = 0.3;
+					break;
+				case 5:
+					scoreBase = 0.4;
+					break;
+				case 6:
+					scoreBase = 0.5;
+					break;
+				case 7:
+					scoreBase = 0.6;
+					break;
+				case 8:
+					scoreBase = 0.7;
+					break;
+				case 9:
+					scoreBase = 0.8;
+					break;
+				case 10:
+					scoreBase = 0.9;
+					break;
+				case 11:
+					scoreBase = 1;
+					break;
+				case 12:
+					scoreBase = 2;
+					break;
+				case 13:
+					scoreBase = 3;
+					break;
+				case 14:
+					scoreBase = 5;
+					break;
+				case 15:
+					scoreBase = 10;
+					break;
+				case 16:
+					scoreBase = 15;
+					break;
+				case 17:
+					scoreBase = 20;
+					break;
+				case 18:
+					scoreBase = 30;
+					break;
+				case 18.5:
+					scoreBase = 45;
+					break;
+				case 19:
+					scoreBase = 60;
+					break;
+				case 19.5:
+					scoreBase = 75;
+					break;
+				case 20:
+					scoreBase = 100;
+					break;
+				case 20.05:
+					scoreBase = 110;
+					break;
+				case 20.1:
+					scoreBase = 120;
+					break;
+				case 20.15:
+					scoreBase = 130;
+					break;
+				case 20.2:
+					scoreBase = 140;
+					break;
+				case 20.25:
+					scoreBase = 150;
+					break;
+				case 20.3:
+					scoreBase = 160;
+					break;
+				case 20.35:
+					scoreBase = 170;
+					break;
+				case 20.4:
+					scoreBase = 180;
+					break;
+				case 20.45:
+					scoreBase = 190;
+					break;
+				case 20.5:
+					scoreBase = 200;
+					break;
+				case 20.55:
+					scoreBase = 210;
+					break;
+				case 20.6:
+					scoreBase = 220;
+					break;
+				case 20.65:
+					scoreBase = 230;
+					break;
+				case 20.7:
+					scoreBase = 240;
+					break;
+				case 20.75:
+					scoreBase = 250;
+					break;
+				case 20.8:
+					scoreBase = 275;
+					break;
+				case 20.85:
+					scoreBase = 300;
+					break;
+				case 20.9:
+					scoreBase = 350;
+					break;
+				case 20.95:
+					scoreBase = 400;
+					break;
+				case 21:
+					scoreBase = 500;
+					break;
+				case 21.05:
+					scoreBase = 700;
+					break;
+				case 21.1:
+					scoreBase = 1000;
+					break;
+				case 21.15:
+					scoreBase = 1600;
+					break;
+				case 21.2:
+					scoreBase = 2000;
+					break;
+				case 21.25:
+					scoreBase = 3000;
+					break;
+				case 21.3:
+					scoreBase = 5000;
+					break;
+				default:
+					scoreBase = null;
 			}
 		}
 
@@ -251,29 +253,56 @@ module.exports = {
 		}
 
 		let xaccMulti = 1;
-		if (xacc === 100) {
-			xaccMulti = 7;
+		if (ver === 'initial' || ver == 'speedBuff1') {
+			if (xacc === 100) {
+				xaccMulti = 7;
+			}
+			else if (xacc >= 99.8) {
+				xaccMulti = (xacc - 99.73334) * 15 + 3;
+			}
+			else if (xacc >= 99) {
+				xaccMulti = Math.pow(xacc - 97, 1.5484) - 0.9249;
+			}
+			else if (xacc >= 95) {
+				xaccMulti = Math.pow(xacc - 94, 1.6) / 12.1326 + 0.9176;
+			}
 		}
-		else if (xacc > 99.8) {
-			xaccMulti = (xacc - 99.73334) * 15 + 3;
-		}
-		else if (xacc > 99) {
-			xaccMulti = Math.pow(xacc - 97, 1.5484) - 0.9249;
-		}
-		else if (xacc > 95) {
-			xaccMulti = Math.pow(xacc - 94, 1.6) / 12.1326 + 0.9176;
+		else if (ver === 'accNerf1' || !ver) {
+			if (xacc === 100) {
+				xaccMulti = 6;
+			}
+			else if (xacc >= 99.8) {
+				xaccMulti = (xacc - 99) * 5;
+			}
+			else if (xacc >= 99) {
+				xaccMulti = Math.pow(xacc - 97, 1.5484) - 0.9249;
+			}
+			else if (xacc >= 95) {
+				xaccMulti = Math.pow(xacc - 94, 1.6) / 12.1326 + 0.9176;
+			}
 		}
 
 		let speedMulti;
 		if (ver === 'initial') {
 			speedMulti = Math.max(Math.min(1, Math.pow(1 / speed, 2.25) * 1.9775 - 0.5958), 0.5);
 		}
-		else if (ver === 'speedBuff1' || !ver) {
-			if (speed < 1) {speedMulti = 0;}
-			else if (speed < 1.25) {speedMulti = Math.pow(1 / speed, 2.5) + (Math.pow(1 / speed, 2) - Math.pow(1 / speed, 0.5)) * 0.2884;}
-			else if (speed <= 1.45) {speedMulti = 0.5;}
-			else if (speed <= 1.5) {speedMulti = 0.75 + Math.sin(Math.PI * 20 * (speed - 1.375)) * 0.25;}
-			else {speedMulti = Math.pow(speed, 1.3) - Math.pow(speed, 1.1455) + Math.pow(speed - 1, 0.1566);}
+		else if (ver === 'speedBuff1') {
+			if (speed < 1) speedMulti = 0;
+			else if (speed < 1.25) speedMulti = Math.pow(1 / speed, 2.5) + (Math.pow(1 / speed, 2) - Math.pow(1 / speed, 0.5)) * 0.2884;
+			else if (speed <= 1.45) speedMulti = 0.5;
+			else if (speed <= 1.5) speedMulti = 0.75 + Math.sin(Math.PI * 20 * (speed - 1.375)) * 0.25;
+			else speedMulti = Math.pow(speed, 1.3) - Math.pow(speed, 1.1455) + Math.pow(speed - 1, 0.1566);
+		}
+		else if (ver === 'accNerf1' || !ver) {
+			if (speed < 1) speedMulti = 0;
+			else if (speed < 1.1) speedMulti = 25 * Math.pow(speed - 1.1, 2) + 0.75;
+			else if (speed < 1.2) speedMulti = 0.75;
+			else if (speed < 1.25) speedMulti = 50 * Math.pow(speed - 1.2, 2) + 0.75;
+			else if (speed < 1.3) speedMulti = -50 * Math.pow(speed - 1.3, 2) + 1;
+			else if (speed < 1.5) speedMulti = 1;
+			else if (speed < 1.75) speedMulti = 2 * Math.pow(speed - 1.5, 2) + 1;
+			else if (speed < 2) speedMulti = -2 * Math.pow(speed - 2, 2) + 1.25;
+			else speedMulti = 1.25;
 		}
 
 		const noEarlyMulti = noEarly ? 1.1 : 1;
