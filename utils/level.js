@@ -8,7 +8,7 @@ const colorData = info['diffColors'];
 
 module.exports.createLevelEmbed = (levelData, interaction) => {
 	let videoId;
-	if (levelData.vidLink !== '-5') {
+	if (!!(levelData.vidLink) && levelData.vidLink !== '-5') {
 		const parsedUrl = new URL(levelData.vidLink);
 		if ([ 'youtube.com', 'www.youtube.com' ].includes(parsedUrl.host)) videoId = parsedUrl.searchParams.get('v');
 		if ([ 'youtu.be' ].includes(parsedUrl.hostname)) videoId = parsedUrl.pathname.slice(1);
@@ -17,6 +17,13 @@ module.exports.createLevelEmbed = (levelData, interaction) => {
 	else {
 		videoId = null;
 		levelData.vidLink = null;
+	}
+
+	if (levelData.diff >= 21.4) {
+		levelData.diff = 'question';
+	}
+	else if (levelData.diff === 21.16 || levelData.diff === 21.26) {
+		levelData.diff = 'grande';
 	}
 
 	const levelEmbed = new EmbedBuilder()
@@ -30,7 +37,7 @@ module.exports.createLevelEmbed = (levelData, interaction) => {
 				inline: true,
 			},
 		)
-		.setImage((!videoId ? 'https://media.discordapp.net/attachments/1081897177594470471/1087255551211208764/c.png' : `https://i.ytimg.com/vi/${videoId}/original.jpg`))
+		.setImage((!videoId ? 'https://media.discordapp.net/attachments/1142069717612372098/1146082697198960650/dsdadd.png' : `https://i.ytimg.com/vi/${videoId}/original.jpg`))
 		.setTimestamp()
 		.setFooter({ text: `ID: ${levelData.id}` });
 
@@ -67,6 +74,13 @@ module.exports.createSearchSelectList = (levelList, page, totalPage, userId, sor
 	const selectOptions = [];
 
 	for (const levelData of levelList) {
+		if (levelData.diff >= 21.4) {
+			levelData.diff = 'question';
+		}
+		else if (levelData.diff === 21.16 || levelData.diff === 21.26) {
+			levelData.diff = 'grande';
+		}
+
 		const levelName = `${levelData.artist} - ${levelData.song}`;
 		let desc;
 		if (levelData.creator.length > 90 - levelData.id.toString().length) {
