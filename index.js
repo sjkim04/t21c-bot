@@ -1,7 +1,7 @@
 // Require the necessary discord.js classes
 const fs = require('node:fs');
 const path = require('node:path');
-const { Client, GatewayIntentBits, Collection, ActivityType } = require('discord.js');
+const { Client, GatewayIntentBits, Collection, ActivityType, Partials } = require('discord.js');
 const { token, sentryURL } = require('./config.json');
 
 const Sentry = require('@sentry/node');
@@ -9,7 +9,8 @@ require('@sentry/tracing');
 
 // Create a new client instance
 const client = new Client({
-	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.DirectMessages ],
+	intents: [ GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.DirectMessages ],
+	partials: [ Partials.Channel ],
 	presence: {
 		activities: [{ name: 'T21+C', type: ActivityType.Playing }],
 	},
