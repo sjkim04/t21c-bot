@@ -4,14 +4,14 @@ const { apiHost } = require('../config.json');
 
 const info = require('../info.json');
 const emojiData = info['emojis'];
-const colorData = info['diffColors'];
+const colorData = info['pguDiffColors'];
 
 module.exports.createLevelEmbed = (levelData, interaction) => {
 	let videoId;
 	if (!!(levelData.vidLink) && levelData.vidLink !== '-5') {
 		const parsedUrl = new URL(levelData.vidLink);
-		if ([ 'youtube.com', 'www.youtube.com' ].includes(parsedUrl.host)) videoId = parsedUrl.searchParams.get('v');
-		if ([ 'youtu.be' ].includes(parsedUrl.hostname)) videoId = parsedUrl.pathname.slice(1);
+		if (['youtube.com', 'www.youtube.com'].includes(parsedUrl.host)) videoId = parsedUrl.searchParams.get('v');
+		if (['youtu.be'].includes(parsedUrl.hostname)) videoId = parsedUrl.pathname.slice(1);
 		if (parsedUrl.pathname.includes('shorts')) videoId = parsedUrl.pathname.split('/')[2];
 	}
 	else {
@@ -19,21 +19,35 @@ module.exports.createLevelEmbed = (levelData, interaction) => {
 		levelData.vidLink = null;
 	}
 
-	if (levelData.diff >= 21.4) {
-		levelData.diff = 'question';
+	const color = !colorData[levelData.pgu_diff] ? colorData['0'] : colorData[levelData.pgu_diff];
+
+
+	if (levelData.pgu_diff === '727') {
+		levelData.pgu_diff = 'grande';
 	}
-	else if (levelData.diff === 21.16 || levelData.diff === 21.26) {
-		levelData.diff = 'grande';
+	else if (levelData.pgu_diff === '64') {
+		levelData.pgu_diff = 'desertbus';
+	}
+	else if (levelData.pgu_diff === '0.9') {
+		levelData.pgu_diff = 'epic';
+	}
+	else if (levelData.pgu_diff === '-22') {
+		levelData.pgu_diff = 'mappack';
+	}
+	else if (!isNaN(+levelData.pgu_diff)) {
+		if (+levelData.pgu_diff >= 21.5) {
+			levelData.pgu_diff = 'question';
+		}
 	}
 
 	const levelEmbed = new EmbedBuilder()
-		.setColor(!colorData[levelData.diff] ? colorData['0'] : colorData[levelData.diff])
+		.setColor(color)
 		.setTitle(`${levelData.artist} - ${levelData.song}`)
 		.setDescription(`Level by ${levelData.creator}`)
 		.addFields(
 			{
 				name: 'Difficulty',
-				value: !emojiData['diff'][levelData.diff] ? levelData.diff.toString() : interaction.client.emojis.cache.get(emojiData['diff'][levelData.diff]).toString(),
+				value: !emojiData['pguDiff'][levelData.pgu_diff] ? levelData.pgu_diff.toString() : interaction.client.emojis.cache.get(emojiData['pguDiff'][levelData.pgu_diff]).toString(),
 				inline: true,
 			},
 		)
@@ -66,6 +80,13 @@ module.exports.createLevelButtons = (levelData) => {
 				.setURL(levelData.workshopLink || 'https://t21c-adofai.kro.kr')
 				.setDisabled(!levelData.workshopLink),
 		]);
+	// const directAdofaiRow = new ActionRowBuilder()
+	// 	.addComponents([
+	// 		new ButtonBuilder()
+	// 			.setStyle(ButtonStyle.Link)
+	// 			.setEmoji(':arrow_forward:')
+	// 			.setURL(`t21c`)
+	// 	])
 
 	return levelButtonsRow;
 };
@@ -74,12 +95,25 @@ module.exports.createSearchSelectList = (levelList, page, totalPage, userId, sor
 	const selectOptions = [];
 
 	for (const levelData of levelList) {
-		if (levelData.diff >= 21.4) {
-			levelData.diff = 'question';
+		if (levelData.pgu_diff === '727') {
+			levelData.pgu_diff = 'grande';
 		}
-		else if (levelData.diff === 21.16 || levelData.diff === 21.26) {
-			levelData.diff = 'grande';
+		else if (levelData.pgu_diff === '64') {
+			levelData.pgu_diff = 'desertbus';
 		}
+		else if (levelData.pgu_diff === '0.9') {
+			levelData.pgu_diff = 'epic';
+		}
+		else if (levelData.pgu_diff === '-22') {
+			levelData.pgu_diff = 'mappack';
+		}
+		else if (!isNaN(+levelData.pgu_diff)) {
+			if (+levelData.pgu_diff >= 21.5) {
+				levelData.pgu_diff = 'question';
+			}
+		}
+
+		const emoji = !emojiData['pguDiff'][levelData.pgu_diff] ? '🔢' : { id: emojiData['pguDiff'][levelData.pgu_diff] };
 
 		const levelName = `${levelData.artist} - ${levelData.song}`;
 		let desc;
@@ -93,7 +127,7 @@ module.exports.createSearchSelectList = (levelList, page, totalPage, userId, sor
 			label: levelName.slice(0, 100),
 			description: desc,
 			value: `showLevel_${levelData.id}`,
-			emoji: { id: emojiData['diff'][levelData.diff] },
+			emoji,
 		});
 	}
 
