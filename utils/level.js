@@ -22,6 +22,8 @@ module.exports.createLevelEmbed = (levelData, interaction) => {
 	const color = !colorData[levelData.pgu_diff] ? colorData['0'] : colorData[levelData.pgu_diff];
 
 
+	let pgu = false;
+
 	if (levelData.pgu_diff === '727') {
 		levelData.pgu_diff = 'grande';
 	}
@@ -39,6 +41,18 @@ module.exports.createLevelEmbed = (levelData, interaction) => {
 			levelData.pgu_diff = 'question';
 		}
 	}
+	else if (emojiData['pguDiff'][levelData.pgu_diff]) {
+		pgu = true;
+	}
+
+	let diffEmoji;
+
+	if (pgu === false) {
+		diffEmoji = !emojiData['pguDiff'][levelData.pgu_diff] ? levelData.pgu_diff.toString() : interaction.client.emojis.cache.get(emojiData['pguDiff'][levelData.pgu_diff]).toString();
+	}
+	else {
+		diffEmoji = `${interaction.client.emojis.cache.get(emojiData['pguDiff'][levelData.pgu_diff]).toString()} | ${interaction.client.emojis.cache.get(emojiData['diff'][levelData.diff]).toString()}`;
+	}
 
 	const levelEmbed = new EmbedBuilder()
 		.setColor(color)
@@ -47,7 +61,7 @@ module.exports.createLevelEmbed = (levelData, interaction) => {
 		.addFields(
 			{
 				name: 'Difficulty',
-				value: !emojiData['pguDiff'][levelData.pgu_diff] ? levelData.pgu_diff.toString() : interaction.client.emojis.cache.get(emojiData['pguDiff'][levelData.pgu_diff]).toString(),
+				value: diffEmoji,
 				inline: true,
 			},
 		)
