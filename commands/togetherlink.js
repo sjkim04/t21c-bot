@@ -38,6 +38,7 @@ module.exports = {
 		let response;
 
 		try {
+			console.log(`${discordUsername} registering as ${togetherUsername}...`);
 			response = await axios.post(`${togetherApiHost}/linkDiscordAccounts?discordUsername=${discordUsername}&discordUserID=${discordUserID}&togetherUsername=${togetherUsername}&togetherLinkCode=${togetherLinkCode}`);
 		}
 		catch (error) {
@@ -45,6 +46,7 @@ module.exports = {
 			return interaction.editReply('Something went wrong in the Together universe... Please try again later.');
 		}
 
+		console.log(response.data);
 		return interaction.editReply(response.data);
 	},
 };
