@@ -19,39 +19,39 @@ module.exports.createLevelEmbed = (levelData, interaction) => {
 		levelData.vidLink = null;
 	}
 
-	const color = !colorData[levelData.pgu_diff] ? colorData['0'] : colorData[levelData.pgu_diff];
+	const color = !colorData[levelData.pguDiff] ? colorData['0'] : colorData[levelData.pguDiff];
 
 
 	let pgu = false;
 
-	if (levelData.pgu_diff === '727') {
-		levelData.pgu_diff = 'grande';
+	if (levelData.pguDiff === '727') {
+		levelData.pguDiff = 'grande';
 	}
-	else if (levelData.pgu_diff === '64') {
-		levelData.pgu_diff = 'desertbus';
+	else if (levelData.pguDiff === '64') {
+		levelData.pguDiff = 'desertbus';
 	}
-	else if (levelData.pgu_diff === '0.9') {
-		levelData.pgu_diff = 'epic';
+	else if (levelData.pguDiff === '0.9') {
+		levelData.pguDiff = 'epic';
 	}
-	else if (levelData.pgu_diff === '-22') {
-		levelData.pgu_diff = 'mappack';
+	else if (levelData.pguDiff === '-22') {
+		levelData.pguDiff = 'mappack';
 	}
-	else if (!isNaN(+levelData.pgu_diff)) {
-		if (+levelData.pgu_diff >= 21.5) {
-			levelData.pgu_diff = 'question';
+	else if (!isNaN(+levelData.pguDiff)) {
+		if (+levelData.pguDiff >= 21.5) {
+			levelData.pguDiff = 'question';
 		}
 	}
-	else if (emojiData['pguDiff'][levelData.pgu_diff]) {
+	else if (emojiData['pguDiff'][levelData.pguDiff]) {
 		pgu = true;
 	}
 
 	let diffEmoji;
 
 	if (pgu === false) {
-		diffEmoji = !emojiData['pguDiff'][levelData.pgu_diff] ? levelData.pgu_diff.toString() : interaction.client.emojis.cache.get(emojiData['pguDiff'][levelData.pgu_diff]).toString();
+		diffEmoji = !emojiData['pguDiff'][levelData.pguDiff] ? levelData.pguDiff.toString() : interaction.client.emojis.cache.get(emojiData['pguDiff'][levelData.pguDiff]).toString();
 	}
 	else {
-		diffEmoji = `${interaction.client.emojis.cache.get(emojiData['pguDiff'][levelData.pgu_diff]).toString()} | ${interaction.client.emojis.cache.get(emojiData['diff'][levelData.diff]).toString()}`;
+		diffEmoji = `${interaction.client.emojis.cache.get(emojiData['pguDiff'][levelData.pguDiff]).toString()} | ${interaction.client.emojis.cache.get(emojiData['diff'][levelData.diff]).toString()}`;
 	}
 
 	const levelEmbed = new EmbedBuilder()
@@ -109,25 +109,25 @@ module.exports.createSearchSelectList = (levelList, page, totalPage, userId, sor
 	const selectOptions = [];
 
 	for (const levelData of levelList) {
-		if (levelData.pgu_diff === '727') {
-			levelData.pgu_diff = 'grande';
+		if (levelData.pguDiff === '727') {
+			levelData.pguDiff = 'grande';
 		}
-		else if (levelData.pgu_diff === '64') {
-			levelData.pgu_diff = 'desertbus';
+		else if (levelData.pguDiff === '64') {
+			levelData.pguDiff = 'desertbus';
 		}
-		else if (levelData.pgu_diff === '0.9') {
-			levelData.pgu_diff = 'epic';
+		else if (levelData.pguDiff === '0.9') {
+			levelData.pguDiff = 'epic';
 		}
-		else if (levelData.pgu_diff === '-22') {
-			levelData.pgu_diff = 'mappack';
+		else if (levelData.pguDiff === '-22') {
+			levelData.pguDiff = 'mappack';
 		}
-		else if (!isNaN(+levelData.pgu_diff)) {
-			if (+levelData.pgu_diff >= 21.5) {
-				levelData.pgu_diff = 'question';
+		else if (!isNaN(+levelData.pguDiff)) {
+			if (+levelData.pguDiff >= 21.5) {
+				levelData.pguDiff = 'question';
 			}
 		}
 
-		const emoji = !emojiData['pguDiff'][levelData.pgu_diff] ? '🔢' : { id: emojiData['pguDiff'][levelData.pgu_diff] };
+		const emoji = !emojiData['pguDiff'][levelData.pguDiff] ? '🔢' : { id: emojiData['pguDiff'][levelData.pguDiff] };
 
 		const levelName = `${levelData.artist} - ${levelData.song}`;
 		let desc;
