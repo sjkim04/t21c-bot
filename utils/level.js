@@ -36,11 +36,6 @@ module.exports.createLevelEmbed = (levelData, interaction) => {
 	else if (levelData.pguDiff === '-22') {
 		levelData.pguDiff = 'mappack';
 	}
-	else if (!isNaN(+levelData.pguDiff)) {
-		if (+levelData.pguDiff >= 21.5) {
-			levelData.pguDiff = 'question';
-		}
-	}
 	else if (emojiData['pguDiff'][levelData.pguDiff]) {
 		pgu = true;
 	}
@@ -120,11 +115,6 @@ module.exports.createSearchSelectList = (levelList, page, totalPage, userId, sor
 		}
 		else if (levelData.pguDiff === '-22') {
 			levelData.pguDiff = 'mappack';
-		}
-		else if (!isNaN(+levelData.pguDiff)) {
-			if (+levelData.pguDiff >= 21.5) {
-				levelData.pguDiff = 'question';
-			}
 		}
 
 		const emoji = !emojiData['pguDiff'][levelData.pguDiff] ? '🔢' : { id: emojiData['pguDiff'][levelData.pguDiff] };
