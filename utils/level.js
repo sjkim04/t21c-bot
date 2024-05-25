@@ -1,5 +1,6 @@
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, EmbedBuilder } = require('discord.js');
 const axios = require('axios');
+const fs = require('fs');
 const { apiHost } = require('../config.json');
 
 const info = require('../info.json');
@@ -21,6 +22,7 @@ module.exports.createLevelEmbed = (levelData, interaction) => {
 
 	const color = !colorData[levelData.pguDiff] ? colorData['0'] : colorData[levelData.pguDiff];
 
+	const diffSet = this.getDiffSet(interaction.user.id);
 
 	let pgu = false;
 
@@ -36,17 +38,22 @@ module.exports.createLevelEmbed = (levelData, interaction) => {
 	else if (levelData.pguDiff === '-22') {
 		levelData.pguDiff = 'mappack';
 	}
-	else if (emojiData['pguDiff'][levelData.pguDiff]) {
+	else if (!isNaN(+levelData.pguDiff)) {
+		if (+levelData.pguDiff >= 21.5) {
+			pgu = false;
+		}
+	}
+	else if (diffSet[levelData.pguDiff]) {
 		pgu = true;
 	}
 
 	let diffEmoji;
 
 	if (pgu === false) {
-		diffEmoji = !emojiData['pguDiff'][levelData.pguDiff] ? levelData.pguDiff.toString() : interaction.client.emojis.cache.get(emojiData['pguDiff'][levelData.pguDiff]).toString();
+		diffEmoji = !diffSet[levelData.pguDiff] ? levelData.pguDiff.toString() : interaction.client.emojis.cache.get(diffSet[levelData.pguDiff]).toString();
 	}
 	else {
-		diffEmoji = `${interaction.client.emojis.cache.get(emojiData['pguDiff'][levelData.pguDiff]).toString()} | ${interaction.client.emojis.cache.get(emojiData['diff'][levelData.diff]).toString()}`;
+		diffEmoji = `${interaction.client.emojis.cache.get(diffSet[levelData.pguDiff]).toString()} | ${interaction.client.emojis.cache.get(emojiData['diff'][levelData.diff]).toString()}`;
 	}
 
 	const levelEmbed = new EmbedBuilder()
@@ -117,7 +124,9 @@ module.exports.createSearchSelectList = (levelList, page, totalPage, userId, sor
 			levelData.pguDiff = 'mappack';
 		}
 
-		const emoji = !emojiData['pguDiff'][levelData.pguDiff] ? '🔢' : { id: emojiData['pguDiff'][levelData.pguDiff] };
+		const diffSet = this.getDiffSet(userId);
+
+		const emoji = !diffSet[levelData.pguDiff] ? '🔢' : { id: diffSet[levelData.pguDiff] };
 
 		const levelName = `${levelData.artist} - ${levelData.song}`;
 		let desc;
@@ -213,3 +222,23 @@ module.exports.getLevelApi = async (endpoint, queryOptions) => {
 		params: queryOptions,
 	});
 };
+
+module.exports.getDiffSet = (userId) => {
+	const userPrefs = JSON.parse(fs.readFileSync('users.json', 'utf8'));
+	if (!userPrefs[userId]) {
+		userPrefs[userId] = { iconset: 'default' };
+		fs.writeFileSync('users.json', JSON.stringify(userPrefs, null, 2));
+	}
+
+	const iconPref = userPrefs[userId]['iconset'];
+	let diffSetName;
+	switch (iconPref) {
+		case 'saph':
+			diffSetName = 'pguDiffSaph';
+			break;
+		case 'default':
+		default:
+			diffSetName = 'pguDiff';
+	}
+	return emojiData[diffSetName];
+}
