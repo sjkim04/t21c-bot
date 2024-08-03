@@ -221,7 +221,7 @@ module.exports = {
         const embed = new EmbedBuilder()
             .setColor(pguDiffColors[diff])
             .setTitle(`Score: ${score}`)
-            .setDescription(`Difficulty: ${interaction.client.emojis.cache.get(emojis[userConfigs[interaction.user.id].iconset === 'default' ? 'pguDiff' : 'pguDiffSaph'][diff]).toString()}
+            .setDescription(`Difficulty: ${interaction.client.emojis.cache.get(emojis['pguDiff'][diff]).toString()}
             X-Accuracy: ${xacc}%
             Tile Count: ${tileCount}
             Speed Trial: x${speed}
