@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const { diffColors, emojis } = require('../info.json');
+const { pguDiffColors, emojis } = require('../info.json');
 const { calculatePP } = require('../utils/score');
 
 module.exports = {
@@ -34,16 +34,6 @@ module.exports = {
             option
                 .setName('speed')
                 .setDescription('The speed of the pass (ex: 1.1)'),
-        )
-        .addNumberOption(option =>
-            option
-                .setName('rankedpos')
-                .setDescription('The position from the best score of the player'),
-        )
-        .addBooleanOption(option =>
-            option
-                .setName('worldfirst')
-                .setDescription('Whether if the pass is world\'s first pass'),
         ),
     async execute(interaction) {
         await interaction.deferReply();
@@ -53,8 +43,6 @@ module.exports = {
         const tileCount = interaction.options.getNumber('tilecount');
         const misses = interaction.options.getNumber('misses', true);
         let speed = interaction.options.getNumber('speed');
-        let rankedPosition = interaction.options.getNumber('rankedpos');
-        const worldFirst = interaction.options.getBoolean('worldfirst');
 
         if (!rankedPosition) {
             rankedPosition = 1;
@@ -229,14 +217,18 @@ module.exports = {
 
         }
 
-        const generalScore = calculatePP(xacc, speed, scoreBase, false, tileCount, misses, false)
+        const score = calculatePP(xacc, speed, scoreBase, false, tileCount, misses, false)
 
-        const rankedScore = Math.round(baseScore * (rankedPosition <= 20 ? Math.pow(0.9, rankedPosition - 1) : 0) * 100) / 100
+        const userConfigs = JSON.parse(fs.readFileSync('users.json', 'utf8'));
 
         const embed = new EmbedBuilder()
-            .setColor(diffColors[diff])
-            .setTitle(`General Score: ${generalScore} | Ranked Score: ${rankedScore}`)
-            .setDescription(`Difficulty: ${interaction.client.emojis.cache.get(emojis['diff'][diff]).toString()}\nX-Accuracy: ${xacc}%\nSpeed Trials: x${speed}\nRanked Position: ${rankedPosition}\nWorld's First: ${worldFirst || false}\nNo Early!!s: ${noEarly || false}${ver ? `\nVersion: ${displayVer[ver]}` : ''}`);
+            .setColor(pguDiffColors[diff])
+            .setTitle(`Score: ${score}`)
+            .setDescription(`Difficulty: ${interaction.client.emojis.cache.get(emojis[userConfigs[interaction.user.id].iconset === 'default' ? 'pguDiff' : 'pguDiffSaph'][diff]).toString()}
+            X-Accuracy: ${xacc}%
+            Tile Count: ${tileCount}
+            Speed Trial: x${speed}
+            Misses: ${misses}`);
 
         await interaction.editReply({ embeds: [embed] });
     },
