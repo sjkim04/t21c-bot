@@ -216,7 +216,7 @@ module.exports = {
 
         const score = calculatePP(xacc, speed, scoreBase, false, tileCount, misses, false)
 
-        const userConfigs = JSON.parse(fs.readFileSync('users.json', 'utf8'));
+        const userConfigs = JSON.parse(require('fs').readFileSync('users.json', 'utf8'));
 
         const embed = new EmbedBuilder()
             .setColor(pguDiffColors[diff])
