@@ -42,7 +42,7 @@ module.exports = {
         const xacc = interaction.options.getNumber('xacc', true);
         const tileCount = interaction.options.getNumber('tilecount');
         const misses = interaction.options.getNumber('misses', true);
-        let speed = interaction.options.getNumber('speed');
+        let speed = interaction.options.getNumber('speed') || 1;
 
         if (misses > 0 && xacc === 100) {
             return interaction.editReply('misses and xacc mismatch');
@@ -215,8 +215,6 @@ module.exports = {
         }
 
         const score = calculatePP(xacc, speed, scoreBase, false, tileCount, misses, false)
-
-        const userConfigs = JSON.parse(require('fs').readFileSync('users.json', 'utf8'));
 
         const embed = new EmbedBuilder()
             .setColor(pguDiffColors[diff])
