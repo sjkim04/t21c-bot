@@ -44,9 +44,6 @@ module.exports = {
         const misses = interaction.options.getNumber('misses', true);
         let speed = interaction.options.getNumber('speed');
 
-        if (!rankedPosition) {
-            rankedPosition = 1;
-        }
         if (misses > 0 && xacc === 100) {
             return interaction.editReply('misses and xacc mismatch');
         }
