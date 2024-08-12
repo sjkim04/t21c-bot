@@ -32,28 +32,31 @@ module.exports = {
 
 
 		const commands = [];
+		const tufCommands = [];
 		const commandsPath = path.join(__dirname, '../commands');
 		const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 
 		for (const file of commandFiles) {
 			const command = require(`../commands/${file}`);
-			commands.push(command.data.toJSON());
+			if (command.tufOnly) tufCommands.push(command.data.toJSON());
+			else commands.push(command.data.toJSON());
 		}
 
 		commands.push(client.jejudo.commandJSON);
 
 		try {
-			console.log(`Started refreshing ${commands.length} application (/) commands.`);
+			console.log(`Started refreshing ${commands.length + tufCommands.length} application (/) commands.`);
 
-			let data;
+			let data, tufData;
 			if (debug) {
-				data = await client.application.commands.set(commands, guildId);
+				data = await client.application.commands.set(commands.concat(tufCommands), guildId);
 			}
 			else {
 				data = await client.application.commands.set(commands);
+				tufData = await client.application.commands.set(tufCommands, guildId);
 			}
 
-			console.log(`Successfully reloaded ${data.size} application (/) commands.`);
+			console.log(`Successfully reloaded ${data.size + tufData.size} application (/) commands.`);
 		}
 		catch (error) {
 			console.error(error);
