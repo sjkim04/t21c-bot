@@ -25,7 +25,7 @@ module.exports = {
         const reason = interaction.options.getString('reason');
         const embed = new EmbedBuilder()
             .setTitle(':white_check_mark: Banned')
-            .addFields({ name: 'User', value: user }, { name: 'Mod', value: interaction.user }, { name: 'Reason', value: reason || '(blank)'})
+            .addFields({ name: 'User', value: `${user}` }, { name: 'Mod', value: `${interaction.user}` }, { name: 'Reason', value: reason || '(blank)'})
         
         return interaction.reply({ embeds: [embed] });
     }
