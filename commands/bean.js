@@ -26,6 +26,7 @@ module.exports = {
         const embed = new EmbedBuilder()
             .setTitle(':white_check_mark: Banned')
             .addFields({ name: 'User', value: `${user}` }, { name: 'Mod', value: `${interaction.user}` }, { name: 'Reason', value: reason || '(blank)'})
+            .setColor(0xff0000)
         
         return interaction.reply({ embeds: [embed] });
     }
