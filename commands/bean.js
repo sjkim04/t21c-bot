@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits } = require("discord.js");
 
 module.exports = {
     checkPerms: {
@@ -19,7 +19,8 @@ module.exports = {
                 option
                     .setName('reason')
                     .setDescription('The reason for your ban')
-                ),
+                )
+        .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
     execute(interaction) {
         const user = interaction.options.getUser('user', true);
         const reason = interaction.options.getString('reason');
