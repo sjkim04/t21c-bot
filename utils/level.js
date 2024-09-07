@@ -81,7 +81,7 @@ module.exports.createLevelEmbed = (levelData, passesData, interaction) => {
 	if (passesData.count > 0) {
 		levelEmbed.addFields({
 			name: 'Best Clear',
-			value: `${bestPassData.player}(${Math.round(bestPassData.scoreV2 * 100) / 100})`,
+			value: `${bestPassData.player} (${Math.round(bestPassData.scoreV2 * 100) / 100})`,
 			inline: true,
 		});
 	}
