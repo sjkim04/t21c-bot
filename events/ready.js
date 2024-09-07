@@ -64,7 +64,7 @@ module.exports = {
 
 		const customStatus = [{ name: 'TUF', type: ActivityType.Watching }, { name: 'ADOFAI', type: ActivityType.Competing }, { name: 'ADOfAI', type: ActivityType.Playing }, { state: 'gaming since 2022!', type: ActivityType.Custom }];
 		setInterval(() => {
-			client.user.setPresence({ activities: customStatus[Math.floor(Math.random() * customStatus.length)] });
+			client.user.setPresence({ activities: [customStatus[Math.floor(Math.random() * customStatus.length)]] });
 		}, 60000);
 
 		console.log(`Ready! Logged in as ${client.user.tag}`);
