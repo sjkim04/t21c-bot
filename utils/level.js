@@ -73,14 +73,18 @@ module.exports.createLevelEmbed = (levelData, passesData, interaction) => {
 				value: `${passesData.count}`,
 				inline: true,
 			},
-			{
-				name: 'Best Clear',
-				value: `${bestPassData.player}(${bestPassData.scoreV2})`,
-			}
 		)
 		.setImage((!videoId ? 'https://media.discordapp.net/attachments/1142069717612372098/1146082697198960650/dsdadd.png' : `https://i.ytimg.com/vi/${videoId}/original.jpg`))
 		.setTimestamp()
 		.setFooter({ text: `ID: ${levelData.id}` });
+
+	if (passesData.count > 0) {
+		levelEmbed.addFields({
+			name: 'Best Clear',
+			value: `${bestPassData.player}(${bestPassData.scoreV2})`,
+			inline: true,
+		});
+	}
 
 	return levelEmbed;
 };
