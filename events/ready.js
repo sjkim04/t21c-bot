@@ -1,4 +1,4 @@
-const { Events, Team, User } = require('discord.js');
+const { Events, Team, User, Client, ActivityType } = require('discord.js');
 const { Jejudo } = require('jejudo');
 const { guildId } = require('../config.json');
 const { createNoPermsMessage } = require('../utils/message');
@@ -61,6 +61,11 @@ module.exports = {
 		catch (error) {
 			console.error(error);
 		}
+
+		const customStatus = [{ name: 'TUF', type: ActivityType.Watching }, { name: 'ADOFAI', type: ActivityType.Competing }, { name: 'ADOfAI', type: ActivityType.Playing }, { state: 'gaming since 2022!', type: ActivityType.Custom }];
+		setInterval(() => {
+			client.user.setPresence({ activities: customStatus[Math.floor(Math.random() * customStatus.length)] });
+		}, 60000);
 
 		console.log(`Ready! Logged in as ${client.user.tag}`);
 	},

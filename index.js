@@ -9,11 +9,8 @@ require('@sentry/tracing');
 
 // Create a new client instance
 const client = new Client({
-	intents: [ GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.DirectMessages ],
-	partials: [ Partials.Channel ],
-	presence: {
-		activities: [{ name: 'T21+C', type: ActivityType.Playing }],
-	},
+	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.DirectMessages],
+	partials: [Partials.Channel],
 });
 
 
