@@ -70,12 +70,12 @@ module.exports.createLevelEmbed = (levelData, passesData, interaction) => {
 			},
 			{
 				name: 'Clears',
-				value: passesData.count,
+				value: `${passesData.count}`,
 				inline: true,
 			},
 			{
 				name: 'Best Clear',
-				value: `${bestPassData.player} (${bestPassData.scoreV2})`,
+				value: `${bestPassData.player}(${bestPassData.scoreV2})`,
 			}
 		)
 		.setImage((!videoId ? 'https://media.discordapp.net/attachments/1142069717612372098/1146082697198960650/dsdadd.png' : `https://i.ytimg.com/vi/${videoId}/original.jpg`))
