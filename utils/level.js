@@ -214,7 +214,7 @@ module.exports.createSearchSelectList = (levelList, page, totalPage, userId, sor
 	};
 };
 
-module.exports.getLevelApi = async (endpoint, queryOptions) => {
+module.exports.getTUFApi = async (endpoint, queryOptions) => {
 	const api = axios.create({
 		baseURL: apiHost,
 	});

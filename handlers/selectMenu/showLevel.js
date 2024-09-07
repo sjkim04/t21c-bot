@@ -1,5 +1,3 @@
-const axios = require('axios');
-const { apiHost } = require('../../config.json');
 const levelUtils = require('../../utils/level');
 
 module.exports = {
@@ -11,6 +9,9 @@ module.exports = {
 		await interaction.deferUpdate();
 
 		const levelId = interaction.values[0].split('_')[1];
+
+		const levelResponse = await levelUtils.getTUFApi(`levels/${levelId}`);
+		const levelData = levelResponse.data;
 
 		const api = axios.create({
 			baseURL: apiHost,

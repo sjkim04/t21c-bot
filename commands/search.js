@@ -29,7 +29,7 @@ module.exports = {
 				limit: 25,
 			};
 
-			const response = await levelUtils.getLevelApi('levels/', queryOptions);
+			const response = await levelUtils.getTUFApi('levels/', queryOptions);
 			const results = response.data.results;
 
 			if (response.data.count === 0) {
@@ -61,7 +61,7 @@ module.exports = {
 					}
 
 					queryOptions.offset = offset;
-					const newResponse = await levelUtils.getLevelApi('levels/', queryOptions);
+					const newResponse = await levelUtils.getTUFApi('levels/', queryOptions);
 					const newResults = newResponse.data.results;
 					await interaction.editReply(levelUtils.createSearchSelectList(newResults, Math.ceil(offset / 25) + 1, Math.ceil(count / 25), interaction.user.id));
 
@@ -103,7 +103,7 @@ module.exports = {
 					}
 
 					queryOptions.offset = (newPage - 1) * 25;
-					const newResponse = await levelUtils.getLevelApi('levels/', queryOptions);
+					const newResponse = await levelUtils.getTUFApi('levels/', queryOptions);
 					const newResults = newResponse.data.results;
 					await interaction.editReply(levelUtils.createSearchSelectList(newResults, newPage, Math.ceil(count / 25), interaction.user.id));
 
@@ -121,7 +121,7 @@ module.exports = {
 						queryOptions.seed = getRandomInt(Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER);
 					}
 
-					const newResponse = await levelUtils.getLevelApi('levels/', queryOptions);
+					const newResponse = await levelUtils.getTUFApi('levels/', queryOptions);
 					const newResults = newResponse.data.results;
 					await interaction.editReply(levelUtils.createSearchSelectList(newResults, 1, Math.ceil(count / 25), interaction.user.id, sortOption));
 

@@ -17,12 +17,9 @@ module.exports = {
 
 		const id = interaction.options.getNumber('id');
 
-		const api = axios.create({
-			baseURL: apiHost,
-		});
-		let response;
+		let levelResponse;
 		try {
-			response = await api.get(`levels/${id}`);
+			levelResponse = await levelUtils.getTUFApi(`levels/${id}`);
 		}
 		catch (err) {
 			if (err.response.status === 404) {
@@ -34,7 +31,7 @@ module.exports = {
 			}
 		}
 
-		const levelData = response.data;
+		const levelData = levelResponse.data;
 
 		const levelEmbed = levelUtils.createLevelEmbed(levelData, interaction);
 		const levelButtonsRow = levelUtils.createLevelButtons(levelData);
