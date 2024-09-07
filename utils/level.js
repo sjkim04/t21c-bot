@@ -116,13 +116,13 @@ module.exports.createLevelButtons = (levelData) => {
 			new ButtonBuilder()
 				.setStyle(ButtonStyle.Link)
 				.setLabel('TUF')
-				.setEmoji('1168507226521079889')
+				.setEmoji({ id: '1168507226521079889' })
 				.setURL(`https://tuforums.com/leveldetail?id=${levelData.id}`),
 			// new ButtonBuilder()
 			// 	.setStyle(ButtonStyle.Link)
 			// 	.setEmoji(':arrow_forward:')
 			// 	.setURL(`t21c`)
-		])
+		]);
 
 	return [levelButtonsRow, directAdofaiRow];
 };
