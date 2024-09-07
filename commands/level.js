@@ -30,6 +30,7 @@ module.exports = {
 				console.error(err);
 			}
 		}
+		const levelData = levelResponse.data;
 
 		try {
 			passResponse = await levelUtils.getTUFApi('passes/', { levelId: levelData.id, sort: 'SCORE_DESC' });
@@ -37,8 +38,6 @@ module.exports = {
 		catch (err) {
 			console.error(err);
 		}
-
-		const levelData = levelResponse.data;
 		const passesData = passResponse.data;
 
 		const levelEmbed = levelUtils.createLevelEmbed(levelData, passesData, interaction);
