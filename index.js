@@ -11,6 +11,9 @@ require('@sentry/tracing');
 const client = new Client({
 	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.DirectMessages],
 	partials: [Partials.Channel],
+	presence: {
+		activities: [{ name: 'TUF', type: ActivityType.Watching }],
+	},
 });
 
 
