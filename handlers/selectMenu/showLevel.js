@@ -13,16 +13,12 @@ module.exports = {
 		const levelResponse = await levelUtils.getTUFApi(`levels/${levelId}`);
 		const levelData = levelResponse.data;
 
-		const api = axios.create({
-			baseURL: apiHost,
-		});
-		const response = await api.get(`levels/${levelId}`);
+		const passesResponse = await levelUtils.getTUFApi('passes/', { levelId, sort: 'SCORE_DESC' });
+		const passesData = passesResponse.data.results[0];
 
-		const levelData = response.data;
-
-		const levelEmbed = levelUtils.createLevelEmbed(levelData, interaction);
+		const levelEmbed = levelUtils.createLevelEmbed(levelData, passesData, interaction);
 		const levelButtonsRow = levelUtils.createLevelButtons(levelData);
 
-		await interaction.editReply({ content: '', embeds: [levelEmbed], components: [levelButtonsRow] });
+		await interaction.editReply({ content: '', embeds: [levelEmbed], components: levelButtonsRow });
 	},
 };

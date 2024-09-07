@@ -31,11 +31,19 @@ module.exports = {
 			}
 		}
 
-		const levelData = levelResponse.data;
+		try {
+			passResponse = await levelUtils.getTUFApi('passes/', { levelId: levelData.id, sort: 'SCORE_DESC' });
+		}
+		catch (err) {
+			console.error(err);
+		}
 
-		const levelEmbed = levelUtils.createLevelEmbed(levelData, interaction);
+		const levelData = levelResponse.data;
+		const passesData = passResponse.data;
+
+		const levelEmbed = levelUtils.createLevelEmbed(levelData, passesData, interaction);
 		const levelButtonsRow = levelUtils.createLevelButtons(levelData);
 
-		await interaction.editReply({ embeds: [levelEmbed], components: [levelButtonsRow] });
+		await interaction.editReply({ embeds: [levelEmbed], components: levelButtonsRow });
 	},
 };

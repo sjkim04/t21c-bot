@@ -1,4 +1,4 @@
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, EmbedBuilder } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, EmbedBuilder, RichPresenceAssets } = require('discord.js');
 const axios = require('axios');
 const fs = require('fs');
 const { apiHost } = require('../config.json');
@@ -7,7 +7,7 @@ const info = require('../info.json');
 const emojiData = info['emojis'];
 const colorData = info['pguDiffColors'];
 
-module.exports.createLevelEmbed = (levelData, interaction) => {
+module.exports.createLevelEmbed = (levelData, passesData, interaction) => {
 	let videoId;
 	if (!!(levelData.vidLink) && levelData.vidLink !== '-5') {
 		const parsedUrl = new URL(levelData.vidLink);
@@ -56,6 +56,8 @@ module.exports.createLevelEmbed = (levelData, interaction) => {
 		diffEmoji = `${interaction.client.emojis.cache.get(diffSet[levelData.pguDiff]).toString()} | ${interaction.client.emojis.cache.get(emojiData['diff'][levelData.diff]).toString()}`;
 	}
 
+	const bestPassData = passesData.results[0];
+
 	const levelEmbed = new EmbedBuilder()
 		.setColor(color)
 		.setTitle(`${levelData.artist} - ${levelData.song}`)
@@ -66,6 +68,15 @@ module.exports.createLevelEmbed = (levelData, interaction) => {
 				value: diffEmoji,
 				inline: true,
 			},
+			{
+				name: 'Clears',
+				value: passesData.count,
+				inline: true,
+			},
+			{
+				name: 'Best Clear',
+				value: `${bestPassData.player} (${bestPassData.scoreV2})`,
+			}
 		)
 		.setImage((!videoId ? 'https://media.discordapp.net/attachments/1142069717612372098/1146082697198960650/dsdadd.png' : `https://i.ytimg.com/vi/${videoId}/original.jpg`))
 		.setTimestamp()
@@ -96,15 +107,20 @@ module.exports.createLevelButtons = (levelData) => {
 				.setURL(levelData.workshopLink || 'https://t21c-adofai.kro.kr')
 				.setDisabled(!levelData.workshopLink),
 		]);
-	// const directAdofaiRow = new ActionRowBuilder()
-	// 	.addComponents([
-	// 		new ButtonBuilder()
-	// 			.setStyle(ButtonStyle.Link)
-	// 			.setEmoji(':arrow_forward:')
-	// 			.setURL(`t21c`)
-	// 	])
+	const directAdofaiRow = new ActionRowBuilder()
+		.addComponents([
+			new ButtonBuilder()
+				.setStyle(ButtonStyle.Link)
+				.setLabel('TUF')
+				.setEmoji(':globe:')
+				.setURL(`https://tuforums.com/leveldetail?id=${levelData.id}`),
+			// new ButtonBuilder()
+			// 	.setStyle(ButtonStyle.Link)
+			// 	.setEmoji(':arrow_forward:')
+			// 	.setURL(`t21c`)
+		])
 
-	return levelButtonsRow;
+	return [levelButtonsRow, directAdofaiRow];
 };
 
 module.exports.createSearchSelectList = (levelList, page, totalPage, userId, sort) => {
