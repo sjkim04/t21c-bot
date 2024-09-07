@@ -1,7 +1,5 @@
-const { SlashCommandBuilder } = require('discord.js');
-const axios = require('axios');
+const { SlashCommandBuilder, InteractionContextType, ApplicationIntegrationType } = require('discord.js');
 const levelUtils = require('../utils/level');
-const { apiHost } = require('../config.json');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -11,7 +9,9 @@ module.exports = {
 			option.setName('id')
 				.setDescription('ID of the level')
 				.setRequired(true),
-		),
+		)
+		.setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
+		.setContexts(InteractionContextType.BotDM, InteractionContextType.Guild, InteractionContextType.PrivateChannel),
 	async execute(interaction) {
 		await interaction.deferReply();
 

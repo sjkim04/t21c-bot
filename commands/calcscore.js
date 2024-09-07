@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, ApplicationIntegrationType, InteractionContextType } = require('discord.js');
 const { pguDiffColors, emojis } = require('../info.json');
 const { calculatePP } = require('../utils/score');
 
@@ -34,7 +34,9 @@ module.exports = {
             option
                 .setName('speed')
                 .setDescription('The speed of the pass (ex: 1.1)'),
-        ),
+        )
+        .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
+        .setContexts(InteractionContextType.BotDM, InteractionContextType.Guild, InteractionContextType.PrivateChannel),
     async execute(interaction) {
         await interaction.deferReply();
 

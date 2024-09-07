@@ -1,17 +1,19 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, ApplicationIntegrationType, InteractionContextType } = require('discord.js');
 
 module.exports = {
-	data: new SlashCommandBuilder()
-		.setName('calcacc')
-		.setDescription('Calculates the accuracy of a play')
-		.addStringOption(option =>
-			option
-				.setName('judgementlist')
-				.setDescription('The list of judgements in T21+C order, split with spaces')
+    data: new SlashCommandBuilder()
+        .setName('calcacc')
+        .setDescription('Calculates the accuracy of a play')
+        .addStringOption(option =>
+            option
+                .setName('judgementlist')
+                .setDescription('The list of judgements in T21+C order, split with spaces')
                 .setRequired(true),
-		),
-	async execute(interaction) {
-		const judgementList = interaction.options.getString('judgementlist');
+        )
+        .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
+        .setContexts(InteractionContextType.BotDM, InteractionContextType.Guild, InteractionContextType.PrivateChannel),
+    async execute(interaction) {
+        const judgementList = interaction.options.getString('judgementlist');
 
         let judgements;
         judgements = judgementList.split(' ');
@@ -57,5 +59,5 @@ module.exports = {
             .setDescription(`Judgements:\n\n${tEarly} Early!!s\n${early} Early!s\n${earlyP} EPerfect!s\n${perfect} Perfect!s\n${lateP} LPerfect!s\n${late} Late!s\n${tLate} Late!!s`)
             .setColor('#2f0565')
         interaction.reply({ embeds: [embed] });
-	},
+    },
 };

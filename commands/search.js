@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
+const { SlashCommandBuilder, ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle, InteractionContextType, ApplicationIntegrationType } = require('discord.js');
 const levelUtils = require('../utils/level');
 const messageUtils = require('../utils/message');
 const { getRandomInt } = require('../utils/general');
@@ -15,7 +15,9 @@ module.exports = {
 					option.setName('query')
 						.setDescription('General query to search'),
 				),
-		),
+		)
+		.setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
+		.setContexts(InteractionContextType.BotDM, InteractionContextType.Guild, InteractionContextType.PrivateChannel),
 	async execute(interaction) {
 		if (interaction.options.getSubcommand() === 'level') {
 			await interaction.deferReply();

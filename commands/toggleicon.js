@@ -1,10 +1,12 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, InteractionContextType, ApplicationIntegrationType } = require('discord.js');
 const fs = require('fs');
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('toggleicon')
-        .setDescription('Toggle iconsets for bot results'),
+        .setDescription('Toggle iconsets for bot results')
+        .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
+        .setContexts(InteractionContextType.BotDM, InteractionContextType.Guild, InteractionContextType.PrivateChannel),
     async execute(interaction) {
         const userConfigs = JSON.parse(fs.readFileSync('users.json', 'utf8'));
         if (!userConfigs[interaction.user.id]) {

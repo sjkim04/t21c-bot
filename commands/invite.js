@@ -1,10 +1,12 @@
-const { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits, OAuth2Scopes } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits, OAuth2Scopes, ApplicationIntegrationType, InteractionContextType } = require('discord.js');
 
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('invite')
-		.setDescription('Invite links related to T21+C.'),
+		.setDescription('Invite links related to T21+C.')
+		.setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
+		.setContexts(InteractionContextType.BotDM, InteractionContextType.Guild, InteractionContextType.PrivateChannel),
 	execute(interaction) {
 		const embed = new EmbedBuilder()
 			.setColor(0x42268d)
