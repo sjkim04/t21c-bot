@@ -17,7 +17,7 @@ module.exports = {
 
 		const id = interaction.options.getNumber('id');
 
-		let levelResponse;
+		let levelResponse, passResponse;
 		try {
 			levelResponse = await levelUtils.getTUFApi(`levels/${id}`);
 		}
