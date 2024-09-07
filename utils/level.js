@@ -116,7 +116,7 @@ module.exports.createLevelButtons = (levelData) => {
 			new ButtonBuilder()
 				.setStyle(ButtonStyle.Link)
 				.setLabel('TUF')
-				.setEmoji('globe')
+				.setEmoji('1168507226521079889')
 				.setURL(`https://tuforums.com/leveldetail?id=${levelData.id}`),
 			// new ButtonBuilder()
 			// 	.setStyle(ButtonStyle.Link)
