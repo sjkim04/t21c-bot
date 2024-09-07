@@ -14,7 +14,7 @@ module.exports = {
 		const levelData = levelResponse.data;
 
 		const passesResponse = await levelUtils.getTUFApi('passes/', { levelId, sort: 'SCORE_DESC' });
-		const passesData = passesResponse.data.results[0];
+		const passesData = passesResponse.data;
 
 		const levelEmbed = levelUtils.createLevelEmbed(levelData, passesData, interaction);
 		const levelButtonsRow = levelUtils.createLevelButtons(levelData);
