@@ -88,3 +88,9 @@ export const createNoPermsMessage = (interaction, permsName): EmbedBuilder => {
         .setTimestamp()
     return embed
 }
+
+export default {
+    disableComponents,
+    permsChecker,
+    createNoPermsMessage
+}

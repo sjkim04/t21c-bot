@@ -4,7 +4,7 @@ import {
     ApplicationIntegrationType,
     ChatInputCommandInteraction
 } from 'discord.js'
-import levelUtils = require('../utils/level')
+import levelUtils from '../utils/level'
 
 module.exports = {
     data: new SlashCommandBuilder()

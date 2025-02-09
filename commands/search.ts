@@ -9,8 +9,8 @@ import {
     ChatInputCommandInteraction,
     StringSelectMenuInteraction
 } from 'discord.js'
-import levelUtils = require('../utils/level')
-import messageUtils = require('../utils/message')
+import levelUtils from '../utils/level'
+import messageUtils from '../utils/message'
 import { getRandomInt } from '../utils/general'
 
 module.exports = {
