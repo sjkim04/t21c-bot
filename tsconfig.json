@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "typeRoots": ["./node_modules/@types", "./typings"],
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "outDir": "./dist", 
   }
 }

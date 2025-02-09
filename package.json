@@ -13,7 +13,9 @@
     "prettier": "^3.4.2"
   },
   "scripts": {
-    "test": "npx nodemon --signal SIGKILL index.js --debug"
+    "build": "tsc -p .",
+    "dev": "nodemon --exec ts-node src/index.ts",
+    "run": "node dist/index.js"
   },
   "nodemonConfig": {
     "ignore": [
