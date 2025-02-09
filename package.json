@@ -2,7 +2,7 @@
   "name": "t21c-bot",
   "version": "0.1.0",
   "main": "index.js",
-  "type": "module",
+  "type": "commonjs",
   "license": "MIT",
   "dependencies": {
     "axios": "^1.7.9",
@@ -16,8 +16,8 @@
   },
   "scripts": {
     "build": "tsc -p .",
-    "dev": "nodemon --exec ts-node src/index.ts",
-    "run": "node dist/index.js"
+    "start:dev": "nodemon --exec ts-node src/index.ts",
+    "start": "node dist/index.js"
   },
   "nodemonConfig": {
     "ignore": [
