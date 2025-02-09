@@ -2,7 +2,8 @@ import {
     SlashCommandBuilder,
     EmbedBuilder,
     ApplicationIntegrationType,
-    InteractionContextType
+    InteractionContextType,
+    HexColorString
 } from 'discord.js'
 import { pguDiffColors, emojis } from '../info.json'
 import { calculatePP } from '../utils/score'
@@ -241,7 +242,7 @@ module.exports = {
         )
 
         const embed = new EmbedBuilder()
-            .setColor(pguDiffColors[diff])
+            .setColor(pguDiffColors[diff] as HexColorString)
             .setTitle(`Score: ${score}`)
             .setDescription(`Difficulty: ${interaction.client.emojis.cache.get(emojis['pguDiff'][diff])?.toString()}
             X-Accuracy: ${xacc}%
