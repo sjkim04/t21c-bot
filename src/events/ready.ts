@@ -4,9 +4,19 @@ import {
     User,
     Client,
     ActivityType,
-    ActivityOptions
+    ActivityOptions,
+    ApplicationCommandManager,
+    ApplicationCommandData,
+    InteractionContextType
 } from 'discord.js'
-import { Jejudo } from 'jejudo'
+import {
+    DocsCommand,
+    EvaluateCommand,
+    Jejudo,
+    JejudoCommand,
+    ShellCommand,
+    SummaryCommand
+} from 'jejudo'
 import { guildId } from '../config.json'
 import { createNoPermsMessage } from '../utils/message'
 import * as fs from 'node:fs'
@@ -27,14 +37,31 @@ module.exports = {
             owners = [owner.id]
         }
 
-        client.jejudo = new Jejudo(client, {
+        const jejudo = new Jejudo(client, {
             owners,
             isOwner: (user) => owners.includes(user.id),
             prefix: `<@${client.application?.id}> `,
             textCommand: 'jejudo',
+            command: 'j',
             noPermission: (i) =>
-                i.reply({ embeds: [createNoPermsMessage(i, 'Bot Owner')] })
+                i.reply({ embeds: [createNoPermsMessage(i, 'Bot Owner')] }),
+            registerDefaultCommands: false
         })
+
+        const summary = new SummaryCommand(jejudo)
+        const updatedJs = new EvaluateCommand(jejudo)
+        updatedJs.data.name = 'js'
+        const updatedDocs = new DocsCommand(jejudo)
+        updatedDocs.data.name = 'docs'
+        const updatedSh = new ShellCommand(jejudo)
+        updatedSh.data.name = 'sh'
+
+        jejudo.registerCommand(summary)
+        jejudo.registerCommand(updatedJs)
+        jejudo.registerCommand(updatedDocs)
+        jejudo.registerCommand(updatedSh)
+
+        client.jejudo = jejudo
 
         const commands: any[] = []
         const tufCommands: any[] = []
@@ -49,7 +76,15 @@ module.exports = {
             else commands.push(command.data.toJSON())
         }
 
-        commands.push(client.jejudo.commandJSON)
+        const jejudoCommands = client.jejudo
+            .commandJSON as ApplicationCommandData
+        jejudoCommands.contexts = [
+            InteractionContextType.BotDM,
+            InteractionContextType.Guild,
+            InteractionContextType.PrivateChannel
+        ]
+
+        commands.push(jejudoCommands)
 
         try {
             console.log(
